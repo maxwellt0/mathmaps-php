@@ -22,12 +22,15 @@ class ProfileController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return PermissionHelpers::requireStatus('Active');
+                        }
                     ],
                 ],
             ],
@@ -66,7 +69,7 @@ class ProfileController extends Controller
     public function actionCreate()
     {
         $model = new Profile;
-        $model->user_id = Yii::$app->user->identity->id; // set to getId();
+        $model->user_id = Yii::$app->user->identity->id;
         if ($already_exists = RecordHelpers::userHas('profile')) {
             return $this->render('view', [
                 'model' => $this->findModel($already_exists),
@@ -82,6 +85,8 @@ class ProfileController extends Controller
 
     public function actionUpdate()
     {
+        PermissionHelpers::requireUpgradeTo('Paid');
+
         if ($model = Profile::find()->where(['user_id' =>
             Yii::$app->user->identity->id])->one()
         ) {
