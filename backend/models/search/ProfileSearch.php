@@ -72,11 +72,11 @@ class ProfileSearch extends Profile
         $this->addSearchParameter($query, 'created_at');
         $this->addSearchParameter($query, 'updated_at');
         $this->addSearchParameter($query, 'user_id');
-// filter by gender name
+        // filter by gender name
         $query->joinWith(['gender' => function ($q) {
             $q->where('gender.gender_name LIKE "%' . $this->genderName . '%"');
         }])
-// filter by profile
+        // filter by profile
             ->joinWith(['user' => function ($q) {
                 $q->where('user.id LIKE "%' . $this->userId . '%"');
             }]);

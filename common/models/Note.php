@@ -13,8 +13,9 @@ use Yii;
  * @property resource $text
  * @property integer $note_type_id
  *
- * @property NoteNote[] $noteNotes
- * @property NoteNote[] $noteNotes0
+ * @property Note[] $higherNotes
+ * @property Note[] $lowerNotes
+ * @property NoteType $noteType
  */
 class Note extends \yii\db\ActiveRecord
 {
@@ -56,16 +57,26 @@ class Note extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNoteNotes()
+    public function getHigherNotes()
     {
-        return $this->hasMany(NoteNote::className(), ['note_id' => 'id']);
+        return $this->hasMany(Note::className(), ['note_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNoteNotes0()
+    public function getLowerNotes()
     {
-        return $this->hasMany(NoteNote::className(), ['used_note_id' => 'id']);
+        return $this->hasMany(Note::className(), ['used_note_id' => 'id']);
+    }
+
+    public function getNoteType()
+    {
+        return $this->hasOne(NoteType::className(), ['id' => 'note_type_id']);
+    }
+
+    public function getNoteTypeName()
+    {
+        return $this->noteType->type_name;
     }
 }
