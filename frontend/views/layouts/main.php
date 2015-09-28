@@ -28,7 +28,7 @@ FontAwesomeAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'Yii 2 Build <i class="fa fa-plug"></i>',
+        'brandLabel' => 'MathMaps <i class="fa fa-globe"></i>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -36,7 +36,8 @@ FontAwesomeAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
+        ['label' => 'Notes', 'url' => ['/note/index']],
+//        ['label' => 'About', 'url' => ['/site/about']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (!Yii::$app->user->isGuest) {

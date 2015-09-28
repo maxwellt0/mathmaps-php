@@ -31,7 +31,7 @@ class NoteSearch extends note
     public function attributeLabels()
     {
         return [
-            'note_type_id' => 'NoteType',
+            'note_type_id' => 'Note Type',
         ];
     }
 
@@ -58,12 +58,12 @@ class NoteSearch extends note
                 'noteTypeName' => [
                     'asc' => ['note_type.note_type_name' => SORT_ASC],
                     'desc' => ['note_type.note_type_name' => SORT_DESC],
-                    'label' => 'NoteType'
+                    'label' => 'Note Type'
                 ],
             ]
         ]);
         if (!($this->load($params) && $this->validate())) {
-            $query->joinWith(['note_type']);
+            $query->joinWith(['noteType']);
             return $dataProvider;
         }
         $this->addSearchParameter($query, 'name', true);
