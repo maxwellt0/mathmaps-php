@@ -26,6 +26,13 @@ class NoteController extends Controller
         ];
     }
 
+    public function beforeAction($action){
+        if(defined('YII_DEBUG') && YII_DEBUG){
+            Yii::$app->assetManager->forceCopy = true;
+        }
+        return parent::beforeAction($action);
+    }
+
     /**
      * Lists all note models.
      * @return mixed
@@ -48,8 +55,19 @@ class NoteController extends Controller
      */
     public function actionView($id)
     {
+        $noteModel = $this->findModel($id);
+
+//        $lowerNotes = $noteModel -> lowerNotes;
+//        $higherNotes = $noteModel -> higherNotes;
+//        $allNotes = array_merge($lowerNotes, $higherNotes, [$noteModel]);
+
+        $nodesModel = ['red','green','blue'];
+        $linksModel = ['red','green'];
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'noteModel' => $noteModel,
+            'nodesModel' => $nodesModel,
+            'linksModel' => $linksModel,
         ]);
     }
 
