@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="note-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
     <?= Graph::widget([
         'nodes' => $nodesModel,
         'links' => $linksModel,
@@ -31,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('View Map', ['view-map', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= DetailView::widget([

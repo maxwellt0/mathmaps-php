@@ -14,21 +14,23 @@ use yii\base\Widget;
 
 class Graph extends Widget
 {
-
     public $nodes;
     public $links;
 
     public function init()
     {
         parent::init();
-        ob_start();
+//        ob_start();
         GraphAsset::register($this->getView());
     }
 
     public function run()
     {
-        $content = ob_get_clean();
-        return $this->render('graph');
+//        $content = ob_get_clean();
+        return $this->render('graph', [
+            'nodes' => $this -> nodes,
+            'links' => $this -> links
+        ]);
     }
 
 }

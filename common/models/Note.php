@@ -60,7 +60,13 @@ class Note extends \yii\db\ActiveRecord
      */
     public function getHigherNotes()
     {
-        return $this->hasMany(Note::className(), ['note_id' => 'id']);
+        return $this->hasMany(
+            Note::className(),
+            ['id' => 'note_id']
+        )->viaTable(
+            'note_note',
+            ['used_note_id' => 'id']
+        );
     }
 
     /**
@@ -68,7 +74,13 @@ class Note extends \yii\db\ActiveRecord
      */
     public function getLowerNotes()
     {
-        return $this->hasMany(Note::className(), ['used_note_id' => 'id']);
+        return $this->hasMany(
+            Note::className(),
+            ['id' => 'used_note_id']
+        )->viaTable(
+            'note_note',
+            ['note_id' => 'id']
+        );
     }
 
     public function getNoteType()

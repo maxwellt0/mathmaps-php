@@ -55,17 +55,61 @@ class NoteController extends Controller
      */
     public function actionView($id)
     {
-        $noteModel = $this->findModel($id);
+        $mainNote = $this->findModel($id);
 
-//        $lowerNotes = $noteModel -> lowerNotes;
-//        $higherNotes = $noteModel -> higherNotes;
-//        $allNotes = array_merge($lowerNotes, $higherNotes, [$noteModel]);
+        $lowerNotes = $mainNote -> lowerNotes;
+        $mainNoteName = $mainNote -> name;
 
-        $nodesModel = ['red','green','blue'];
-        $linksModel = ['red','green'];
+        $nodesModel = [$mainNoteName];
+        $linksModel = [];
+
+        foreach ($lowerNotes as $note) {
+            $nodesModel[] = $note -> name;
+
+            $link = [];
+            $link[1] = $note -> name;
+            $link[2] = $mainNoteName;
+            $linksModel[] = $link;
+        }
 
         return $this->render('view', [
-            'noteModel' => $noteModel,
+            'noteModel' => $mainNote,
+            'nodesModel' => $nodesModel,
+            'linksModel' => $linksModel,
+        ]);
+    }
+
+    public function actionViewMap($id)
+    {
+        $mainNote = $this->findModel($id);
+
+        $lowerNotes = $mainNote -> lowerNotes;
+        $higherNotes = $mainNote -> higherNotes;
+        $mainNoteName = $mainNote -> name;
+
+        $nodesModel = [$mainNoteName];
+        $linksModel = [];
+
+        foreach ($lowerNotes as $note) {
+            $nodesModel[] = $note -> name;
+
+            $link = [];
+            $link[1] = $note -> name;
+            $link[2] = $mainNoteName;
+            $linksModel[] = $link;
+        }
+        foreach ($higherNotes as $note) {
+            $nodesModel[] = $note -> name;
+
+            $link = [];
+            $link[1] = $mainNoteName;
+            $link[2] = $note -> name;
+
+            $linksModel[] = $link;
+        }
+
+        return $this->render('map', [
+            'noteModel' => $mainNote,
             'nodesModel' => $nodesModel,
             'linksModel' => $linksModel,
         ]);
@@ -136,4 +180,5 @@ class NoteController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }
