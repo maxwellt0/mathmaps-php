@@ -242,7 +242,7 @@ Graph.Renderer.Raphael.prototype = {
                 var color = Raphael.getColor();
                 var ellipse = r.ellipse(0, 0, 30, 20).attr({fill: color, stroke: color, "stroke-width": 2});
                 /* set DOM node ID */
-                ellipse.node.id = node.label || node.id;
+                ellipse.node.id =  node.id || node.label;
                 shape = r.set().
                     push(ellipse).
                     push(r.text(0, 30, node.label || node.id));

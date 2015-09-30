@@ -17,15 +17,14 @@ class GraphAsset extends AssetBundle
     public $autoGenerate = true;
 
     public $js = [
-        'js/dracula_graph.js',
         'js/raphael-min.js',
+        'js/dracula_graph.js',
         'js/dracula_graffle.js',
-        'js/example.js',
-        'js/jquery-1.4.2.min.js',
+        'js/graph.js',
     ];
 
     public $depends = [
         'yii\web\YiiAsset',
-//        'yii\web\JqueryAsset'
+        'yii\web\JqueryAsset'
     ];
 }

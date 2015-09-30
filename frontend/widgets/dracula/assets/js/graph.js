@@ -9,11 +9,11 @@ window.onload = function() {
     g = new Graph();
 
     for (var i=0; i<nodes.length; i++) {
-        g.addNode(nodes[i]);
+        g.addNode(nodes[i][0], { label : nodes[i][1] });
     }
 
     for (i=0; i<links.length; i++) {
-        g.addEdge(links[i][1], links[i][2], { directed : true });
+        g.addEdge(links[i][0], links[i][1], { directed : true });
     }
 
     /* layout the graph using the Spring layout implementation */
@@ -26,6 +26,11 @@ window.onload = function() {
         layouter.layout();
         renderer.draw();
     };
+
+    $('ellipse').dblclick( function () {
+        var id = $(this).attr('id');
+        window.location.href = '/index.php?r=note/view&id=' + id;
+    });
 
 };
 

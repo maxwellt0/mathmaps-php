@@ -59,16 +59,17 @@ class NoteController extends Controller
 
         $lowerNotes = $mainNote -> lowerNotes;
         $mainNoteName = $mainNote -> name;
+        $mainNoteId = $mainNote -> id;
 
-        $nodesModel = [$mainNoteName];
+        $node = [$mainNoteId, $mainNoteName];
+        $nodesModel = [$node];
         $linksModel = [];
 
         foreach ($lowerNotes as $note) {
-            $nodesModel[] = $note -> name;
+            $node = [$note -> id, $note -> name];
+            $nodesModel[] = $node;
 
-            $link = [];
-            $link[1] = $note -> name;
-            $link[2] = $mainNoteName;
+            $link = [$note -> id, $mainNoteId];
             $linksModel[] = $link;
         }
 
@@ -86,25 +87,24 @@ class NoteController extends Controller
         $lowerNotes = $mainNote -> lowerNotes;
         $higherNotes = $mainNote -> higherNotes;
         $mainNoteName = $mainNote -> name;
+        $mainNoteId = $mainNote -> id;
 
-        $nodesModel = [$mainNoteName];
+        $node = [$mainNoteId, $mainNoteName];
+        $nodesModel = [$node];
         $linksModel = [];
 
         foreach ($lowerNotes as $note) {
-            $nodesModel[] = $note -> name;
+            $node = [$note -> id, $note -> name];
+            $nodesModel[] = $node;
 
-            $link = [];
-            $link[1] = $note -> name;
-            $link[2] = $mainNoteName;
+            $link = [$note -> id, $mainNoteId];
             $linksModel[] = $link;
         }
         foreach ($higherNotes as $note) {
-            $nodesModel[] = $note -> name;
+            $node = [$note -> id, $note -> name];
+            $nodesModel[] = $node;
 
-            $link = [];
-            $link[1] = $mainNoteName;
-            $link[2] = $note -> name;
-
+            $link = [ $mainNoteId, $note -> id];
             $linksModel[] = $link;
         }
 
