@@ -1,5 +1,6 @@
 <?php
 
+use frontend\widgets\dpl\PickList;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -14,11 +15,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'note_status_id')->textInput() ?>
+    <?= $form->field($model, 'text')->textarea(['rows'=>10]); ?>
 
-    <?= $form->field($model, 'text')->textInput() ?>
+    <?= $form->field($model, 'note_type_id')->dropDownList($model->noteTypeList,
+        ['prompt' => 'Please Choose One']);?>
 
-    <?= $form->field($model, 'note_type_id')->textInput() ?>
+    <?= PickList::widget([
+        'source' => $model -> lowerNotesList,
+        'model' => $model,
+    ]); ?>
+
+<!--    //= $form->field($model, 'note_type_id')->listBox($model->noteTypeList,['multiple' =>true]); -->
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "note".
@@ -91,5 +92,34 @@ class Note extends \yii\db\ActiveRecord
     public function getNoteTypeName()
     {
         return $this->noteType->type_name;
+    }
+
+    public function getNoteTypeList()
+    {
+        Yii::info("want's note types!");
+        $droptions = NoteType::find()->asArray()->all();
+        return Arrayhelper::map($droptions, 'id', 'type_name');
+    }
+
+    public function setLowerNotes($ids)
+    {
+        $this -> lowerNotes = $this -> hasMany(
+            Note::className(),
+            ['id' => $ids]
+        );
+        Yii::info("changed lower notes!");
+    }
+
+    public function getLowerNotesList()
+    {
+        Yii::info("want's lower notes!");
+        $lowerNotes = $this -> lowerNotes;
+        return ArrayHelper::map($lowerNotes, 'id', 'name');
+    }
+
+    public function getHigherNotesList()
+    {
+        $higherNotes = $this -> higherNotes;
+        return ArrayHelper::map($higherNotes, 'id', 'name');
     }
 }
