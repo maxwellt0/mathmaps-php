@@ -125,6 +125,9 @@ class NoteController extends Controller
         $model = new note();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $note = Yii::$app->request->post('Note');
+            $model->linkLowerNotes($note['lowerNotesList']);
+            $model->linkHigherNotes($note['higherNotesList']);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -144,6 +147,9 @@ class NoteController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $note = Yii::$app->request->post('Note');
+            $model->linkLowerNotes($note['lowerNotesList']);
+            $model->linkHigherNotes($note['higherNotesList']);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

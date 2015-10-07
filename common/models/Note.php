@@ -56,6 +56,22 @@ class Note extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getNoteType()
+    {
+        return $this->hasOne(NoteType::className(), ['id' => 'note_type_id']);
+    }
+
+    public function getNoteTypeName()
+    {
+        return $this->noteType->type_name;
+    }
+    public function getNoteTypeList()
+    {
+        $droptions = NoteType::find()->asArray()->all();
+        return Arrayhelper::map($droptions, 'id', 'type_name');
+    }
+
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -84,35 +100,8 @@ class Note extends \yii\db\ActiveRecord
         );
     }
 
-    public function getNoteType()
-    {
-        return $this->hasOne(NoteType::className(), ['id' => 'note_type_id']);
-    }
-
-    public function getNoteTypeName()
-    {
-        return $this->noteType->type_name;
-    }
-
-    public function getNoteTypeList()
-    {
-        Yii::info("want's note types!");
-        $droptions = NoteType::find()->asArray()->all();
-        return Arrayhelper::map($droptions, 'id', 'type_name');
-    }
-
-    public function setLowerNotes($ids)
-    {
-        $this -> lowerNotes = $this -> hasMany(
-            Note::className(),
-            ['id' => $ids]
-        );
-        Yii::info("changed lower notes!");
-    }
-
     public function getLowerNotesList()
     {
-        Yii::info("want's lower notes!");
         $lowerNotes = $this -> lowerNotes;
         return ArrayHelper::map($lowerNotes, 'id', 'name');
     }
@@ -122,4 +111,46 @@ class Note extends \yii\db\ActiveRecord
         $higherNotes = $this -> higherNotes;
         return ArrayHelper::map($higherNotes, 'id', 'name');
     }
+
+    public function getOtherNotesList()
+    {
+        $ids = [];
+        if ($this->id) {
+            $ids[] = $this->id;
+            foreach($this->lowerNotes as $note){
+                $ids[] = $note->id;
+            }
+            foreach($this->higherNotes as $note){
+                $ids[] = $note->id;
+            }
+        }
+
+        $otherNotes = $this::find()
+            ->where(['not in','id', $ids])
+            ->all();
+        return ArrayHelper::map($otherNotes, 'id', 'name');
+    }
+
+    public function linkLowerNotes($ids)
+    {
+        $this->unlinkAll('lowerNotes', $this->lowerNotes);
+        $newNotes = $this::find()
+            ->where(['in', 'id', $ids])
+            ->all();
+        foreach ($newNotes as $note) {
+            $this->link('lowerNotes', $note);
+        }
+    }
+
+    public function linkHigherNotes($ids)
+    {
+        $this->unlinkAll('higherNotes', $this->higherNotes);
+        $newNotes = $this::find()
+            ->where(['in', 'id', $ids])
+            ->all();
+        foreach ($newNotes as $note) {
+            $this->link('higherNotes', $note);
+        }
+    }
+
 }
