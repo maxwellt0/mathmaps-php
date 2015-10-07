@@ -22,9 +22,13 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-md-3">
             <div class="input-group">
-                <?= $form->field($model, 'higherNotesList')->listBox(
+                <?= $form->field(
+                    $model,
+                    'higherNotes',
+                    ['inputOptions'=>['size'=>8]]
+                )->listBox(
                     $model->higherNotesList,
-                    ['multiple' =>true,]
+                    ['multiple' =>true]
                 );?>
             </div>
         </div>
@@ -39,7 +43,8 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="col-md-4">
-            <select class="form-control" id="assocNotes" size="8" multiple>
+            <label for="assocNotes">Непід'єднані записи</label>
+            <select class="form-control" id="assocNotes" size="8" multiple title="Непід'єднані записи">
                 <?php foreach ($model -> otherNotesList as $id => $name) {
                     echo '<option value="' . $id . '">' . $name . '</option>';
                 } ?>
@@ -57,7 +62,11 @@ use yii\widgets\ActiveForm;
 
         <div class="col-md-3">
             <div class="input-group">
-                <?= $form->field($model, 'lowerNotesList')->listBox(
+                <?= $form->field(
+                    $model,
+                    'lowerNotes',
+                    ['inputOptions'=>['size'=>8]]
+                )->listBox(
                     $model->lowerNotesList,
                     ['multiple' =>true,]
                 );?>
@@ -74,26 +83,23 @@ use yii\widgets\ActiveForm;
 
 </div>
 <script>
-    /**
-     * Created by Maxwellt on 01.10.2015.
-     */
     $("#fromLower").click(function () {
-        var selectedItem = $("#note-lowernoteslist option:selected");
+        var selectedItem = $("#note-lowernotes option:selected");
         $("#assocNotes").append(selectedItem);
     });
 
     $("#toLower").click(function () {
         var selectedItem = $("#assocNotes option:selected");
-        $("#note-lowernoteslist").append(selectedItem);
+        $("#note-lowernotes").append(selectedItem);
     });
 
     $("#fromHigher").click(function () {
-        var selectedItem = $("#note-highernoteslist option:selected");
+        var selectedItem = $("#note-highernotes option:selected");
         $("#assocNotes").append(selectedItem);
     });
 
     $("#toHigher").click(function () {
         var selectedItem = $("#assocNotes option:selected");
-        $("#note-highernoteslist").append(selectedItem);
+        $("#note-highernotes").append(selectedItem);
     });
 </script>

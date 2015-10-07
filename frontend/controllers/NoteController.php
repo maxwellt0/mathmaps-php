@@ -148,8 +148,8 @@ class NoteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $note = Yii::$app->request->post('Note');
-            $model->linkLowerNotes($note['lowerNotesList']);
-            $model->linkHigherNotes($note['higherNotesList']);
+            $model->linkLowerNotes($note['lowerNotes']);
+            $model->linkHigherNotes($note['higherNotes']);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
