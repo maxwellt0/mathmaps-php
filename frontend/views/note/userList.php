@@ -10,7 +10,7 @@ use common\models\PermissionHelpers;
 /* @var $usingTabs */
 
 //$this->title = $model->user->username . "'s notes";
-$this->title = 'User' . "'s notes";
+$this->title = Yii::$app->user->identity->username . "'s notes";
 $this->params['breadcrumbs'][] = ['label' => 'Profile', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

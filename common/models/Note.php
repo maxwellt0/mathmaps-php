@@ -168,4 +168,15 @@ class Note extends \yii\db\ActiveRecord
         );
     }
 
+    public function linkNoteToUser($userId)
+    {
+        $statusId = UsingStatus::getIdByValue(0);
+        $link = new UserNote([
+            'user_id' => $userId,
+            'note_id' => $this->id,
+            'using_status_id' => $statusId
+        ]);
+        $this->link('noteUserLinks', $link);
+    }
+
 }

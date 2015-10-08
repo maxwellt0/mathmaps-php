@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\User;
+use common\models\UserNote;
 use common\models\UsingStatus;
 use Yii;
 use common\models\note;
@@ -63,7 +64,7 @@ class NoteController extends Controller
         return $this->render('userList', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'usingTabs' => $usingTabs
+            'usingTabs' => $usingTabs,
         ]);
     }
 
@@ -92,10 +93,18 @@ class NoteController extends Controller
             $linksModel[] = $link;
         }
 
+        $un = UserNote::find()
+            ->where([
+                'user_id' => Yii::$app->user->identity->id,
+                'note_id' => $id
+            ])->one();
+        $isUserNote = $un? true : false;
+
         return $this->render('view', [
             'noteModel' => $mainNote,
             'nodesModel' => $nodesModel,
             'linksModel' => $linksModel,
+            'isUserNote' => $isUserNote
         ]);
     }
 
@@ -188,6 +197,15 @@ class NoteController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionAddToList($id)
+    {
+        $userId = Yii::$app->user->identity->id;
+        $note = $this->findModel($id);
+        $note->linkNoteToUser($userId);
+
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     /**

@@ -7,7 +7,6 @@ use Yii;
 /**
  * This is the model class for table "user_note".
  *
- * @property string $id
  * @property integer $using_status_id
  * @property string $note_id
  * @property string $user_id
@@ -39,7 +38,6 @@ class UserNote extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'using_status_id' => 'Using Status ID',
             'note_id' => 'Note ID',
             'user_id' => 'User ID',

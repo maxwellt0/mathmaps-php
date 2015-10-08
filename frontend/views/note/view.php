@@ -8,6 +8,7 @@ use frontend\widgets\dracula\Graph;
 /* @var $noteModel common\models\note */
 /* @var $nodesModel */
 /* @var $linksModel */
+/* @var $isUserNote */
 
 $this->title = $noteModel->name;
 $this->params['breadcrumbs'][] = ['label' => 'Notes', 'url' => ['index']];
@@ -31,7 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
         <?= Html::a('View Map', ['view-map', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Âèâ÷èòè', ['update', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
+        <?php if (!$isUserNote) {
+            echo Html::a('Ð’Ð¸Ð²Ñ‡Ð¸Ñ‚Ð¸', ['add-to-list', 'id' => $noteModel->id], ['class' => 'btn btn-primary']);
+        }  ?>
     </p>
 
     <?= DetailView::widget([

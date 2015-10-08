@@ -294,7 +294,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(
             UserNote::className(),
-            ['id' => 'user_id']
+            ['user_id' => 'id']
         );
     }
 
