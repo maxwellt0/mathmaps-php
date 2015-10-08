@@ -65,12 +65,11 @@ class Note extends \yii\db\ActiveRecord
     {
         return $this->noteType->type_name;
     }
-    public function getNoteTypeList()
+    public static function getNoteTypeList()
     {
         $droptions = NoteType::find()->asArray()->all();
         return Arrayhelper::map($droptions, 'id', 'type_name');
     }
-
 
     /**
      * @return \yii\db\ActiveQuery
@@ -151,6 +150,22 @@ class Note extends \yii\db\ActiveRecord
         foreach ($newNotes as $note) {
             $this->link('higherNotes', $note);
         }
+    }
+
+    public function getNoteUsers()
+    {
+        return User::find()
+            ->where(['user_note.note_id' => $this->id])
+            ->joinWith(['userNoteLinks'])
+            ->all();
+    }
+
+    public function getNoteUserLinks()
+    {
+        return $this->hasMany(
+            UserNote::className(),
+            ['note_id' => 'id']
+        );
     }
 
 }

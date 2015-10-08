@@ -279,6 +279,25 @@ class User extends ActiveRecord implements IdentityInterface
         return Arrayhelper::map($droptions, 'status_value', 'status_name');
     }
 
+//    public function getUserNotes()
+//    {
+//        return $this->hasMany(
+//            Note::className(),
+//            ['id' => 'note_id']
+//        )->viaTable(
+//            'user_note',
+//            ['user_id' => 'id']
+//        );
+//    }
+
+    public function getUserNoteLinks()
+    {
+        return $this->hasMany(
+            UserNote::className(),
+            ['id' => 'user_id']
+        );
+    }
+
     /**
      *getUserType
      *line break to avoid word wrap in PDF

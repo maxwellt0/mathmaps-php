@@ -2,6 +2,7 @@
 
 namespace frontend\models\search;
 
+use common\models\UsingStatus;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -40,11 +41,20 @@ class NoteSearch extends note
      *
      * @param array $params
      *
+     * @param null $id
+     * @param int $usingStatus
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $id = null, $usingStatus = 0)
     {
         $query = note::find();
+        if ($id) {
+            $statusId = UsingStatus::getIdByValue($usingStatus);
+            $query->where([
+                    'user_note.user_id' => $id,
+                    'user_note.using_status_id' => $statusId
+                ])->joinWith(['noteUserLinks']);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

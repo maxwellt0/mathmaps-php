@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
         <?= Html::a('View Map', ['view-map', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Вивчити', ['update', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= DetailView::widget([
