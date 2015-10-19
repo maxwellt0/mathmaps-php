@@ -53,7 +53,10 @@ class UsingStatus extends \yii\db\ActiveRecord
 
     public static function getStatusList()
     {
-        $tabs = UsingStatus::find()->asArray()->all();
+        $tabs = UsingStatus::find()
+            ->orderBy('status_value ASC')
+            ->asArray()
+            ->all();
         return Arrayhelper::map($tabs, 'status_value', 'status_name');
     }
 }

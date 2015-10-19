@@ -65,10 +65,27 @@ class Note extends \yii\db\ActiveRecord
     {
         return $this->noteType->type_name;
     }
+
     public static function getNoteTypeList()
     {
         $droptions = NoteType::find()->asArray()->all();
         return Arrayhelper::map($droptions, 'id', 'type_name');
+    }
+
+    public function getNoteStatus()
+    {
+        return $this->hasOne(NoteStatus::className(), ['id' => 'note_status_id']);
+    }
+
+    public function getNoteStatusName()
+    {
+        return $this->noteStatus->status_name;
+    }
+
+    public function getNoteStatusList()
+    {
+        $droptions = NoteStatus::find()->asArray()->all();
+        return Arrayhelper::map($droptions, 'id', 'status_name');
     }
 
     /**
