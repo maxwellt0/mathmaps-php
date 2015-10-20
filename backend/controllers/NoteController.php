@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\NoteStatus;
+use common\models\UserNote;
 use Yii;
 use common\models\note;
 use backend\models\search\NoteSearch;
@@ -52,21 +53,82 @@ class NoteController extends Controller
      */
     public function actionView($id)
     {
+        $mainNote = $this->findModel($id);
+
+        $lowerNotes = $mainNote->lowerNotes;
+        $mainNoteName = $mainNote->name;
+        $mainNoteId = $mainNote->id;
+
+        $node = [$mainNoteId, $mainNoteName];
+        $nodesModel = [$node];
+        $linksModel = [];
+
+        foreach ($lowerNotes as $note) {
+            $node = [$note->id, $note->name];
+            $nodesModel[] = $node;
+
+            $link = [$note->id, $mainNoteId];
+            $linksModel[] = $link;
+        }
+
+        $un = UserNote::find()
+            ->where([
+                'user_id' => Yii::$app->user->identity->id,
+                'note_id' => $id
+            ])->one();
+        $isUserNote = $un? true : false;
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'noteModel' => $mainNote,
+            'nodesModel' => $nodesModel,
+            'linksModel' => $linksModel,
+            'isUserNote' => $isUserNote
         ]);
     }
 
-    /**
-     * Creates a new note model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+    public function actionViewMap($id)
+    {
+        $mainNote = $this->findModel($id);
+
+        $lowerNotes = $mainNote->lowerNotes;
+        $higherNotes = $mainNote->higherNotes;
+        $mainNoteName = $mainNote->name;
+        $mainNoteId = $mainNote->id;
+
+        $node = [$mainNoteId, $mainNoteName];
+        $nodesModel = [$node];
+        $linksModel = [];
+
+        foreach ($lowerNotes as $note) {
+            $node = [$note->id, $note->name];
+            $nodesModel[] = $node;
+
+            $link = [$note->id, $mainNoteId];
+            $linksModel[] = $link;
+        }
+        foreach ($higherNotes as $note) {
+            $node = [$note->id, $note->name];
+            $nodesModel[] = $node;
+
+            $link = [$mainNoteId, $note->id];
+            $linksModel[] = $link;
+        }
+
+        return $this->render('map', [
+            'noteModel' => $mainNote,
+            'nodesModel' => $nodesModel,
+            'linksModel' => $linksModel,
+        ]);
+    }
+
     public function actionCreate()
     {
         $model = new note();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $note = Yii::$app->request->post('Note');
+            $model->linkLowerNotes($note['lowerNotesList']);
+            $model->linkHigherNotes($note['higherNotesList']);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -86,6 +148,9 @@ class NoteController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $note = Yii::$app->request->post('Note');
+            $model->linkLowerNotes($note['lowerNotes']);
+            $model->linkHigherNotes($note['higherNotes']);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
