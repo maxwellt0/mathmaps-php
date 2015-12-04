@@ -34,34 +34,46 @@ FontAwesomeAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Notes', 'url' => ['/note/index']],
+        ['label' => 'Головна', 'url' => ['/site/index']],
+        ['label' => 'Записи', 'url' => ['/note/index']],
+//        ['label' => 'Карти', 'url' => ['/map/index']],
 //        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
-    if (!Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Profile', 'url' => ['/profile/view']];
-    }
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Реєстрація', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Вхід', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = [
-            'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+        $ddownItems = [];
+        $ddownItems[] = ['label' => 'Профайл', 'url' => ['/profile/view']];
+        $ddownItems[] = '<li class="divider"></li>';
+        $ddownItems[] = [
+            'label' => 'Вийти',
             'url' => ['/site/logout'],
             'linkOptions' => ['data-method' => 'post']
+        ];
+
+        $menuItems[] = [
+            'label' => Yii::$app->user->identity->username,
+            'items' => $ddownItems,
+            'options' => ['style' => 'font-weight: bold']
         ];
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
     ]);
+
     NavBar::end();
     ?>
 
     <div class="container">
         <?= Breadcrumbs::widget([
+            'homeLink' => [
+                'label' => 'Головна',
+                'url' => Yii::$app->homeUrl,
+            ],
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
@@ -71,7 +83,8 @@ FontAwesomeAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; My Company <?= date('Y')
+            //        ['label' => 'Контакти', 'url' => ['/site/contact']], ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

@@ -93,12 +93,7 @@ class NoteController extends Controller
             $linksModel[] = $link;
         }
 
-        $un = UserNote::find()
-            ->where([
-                'user_id' => Yii::$app->user->identity->id,
-                'note_id' => $id
-            ])->one();
-        $isUserNote = $un? true : false;
+        $isUserNote = $this->isUserNote($id)? true : false;
 
         return $this->render('view', [
             'noteModel' => $mainNote,
@@ -221,6 +216,24 @@ class NoteController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    private function isUserNote($id)
+    {
+        if (!Yii::$app->user->isGuest) {
+            $un = UserNote::find()
+                ->where([
+                    'user_id' => Yii::$app->user->identity->id,
+                    'note_id' => $id
+                ])->one();
+            return $un;
+        } else {
+            return false;
         }
     }
 

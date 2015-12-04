@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\search\NoteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Notes';
+$this->title = 'Записи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="note-index">
@@ -19,9 +20,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'name',
+            [
+                'attribute'=>'name',
+                'value'=>function ($data) {
+                    return Html::a(Html::encode($data->name), Url::to(['view', 'id' => $data->id]));
+                },
+                'format' => 'raw',
+            ],
             'noteTypeName',
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 

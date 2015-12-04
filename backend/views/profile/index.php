@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\grid\GridView;
-use \yii\bootstrap\Collapse;
+use yii\bootstrap\Collapse;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\ProfileSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
