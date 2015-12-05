@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
@@ -83,8 +84,9 @@ FontAwesomeAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y')
-            //        ['label' => 'Контакти', 'url' => ['/site/contact']], ?></p>
+        <p class="pull-left">
+            <?= Html::a('Контакти', Url::to('/site/contact')); ?>
+        </p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
