@@ -89,3 +89,11 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+#empty-map {
+    margin: 1em 0 1em;
+    padding: 1em;
+    background: #f0f0f0;
+    text-align: center;
+    border-radius: 5px;
+}

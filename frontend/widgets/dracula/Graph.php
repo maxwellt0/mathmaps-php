@@ -27,10 +27,14 @@ class Graph extends Widget
     public function run()
     {
 //        $content = ob_get_clean();
-        return $this->render('graph', [
-            'nodes' => $this -> nodes,
-            'links' => $this -> links
-        ]);
+        if ($this->links) {
+            return $this->render('graph', [
+                'nodes' => $this -> nodes,
+                'links' => $this -> links
+            ]);
+        } else {
+            return '<div id="empty-map"><h3>Немає залежностей</h3></div>';
+        }
     }
 
 }

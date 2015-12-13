@@ -18,9 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?= Graph::widget([
-        'nodes' => $nodesModel,
-        'links' => $linksModel,
-    ]) ?>
+            'nodes' => $nodesModel,
+            'links' => $linksModel,
+    ]); ?>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
