@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "user_note".
@@ -52,5 +53,24 @@ class UserNote extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public static function getNotesCountList($userId)
+    {
+        $counts = UsingStatus::find()
+            ->select('status_value, COUNT(status_value) AS cnt')
+            ->joinWith(['userNotes'])
+            ->where(['user_id' => $userId])
+            ->groupBy('status_value')
+            ->orderBy('status_value')
+            ->all();
+        $countsMap = Arrayhelper::map($counts, 'status_value', 'cnt');
+        $tabs = UsingStatus::getStatusList();
+        foreach ($tabs as $value=>$name){
+            if (!array_key_exists($value, $countsMap)) {
+                $countsMap[$value] = 0;
+            }
+        }
+        return $countsMap;
     }
 }

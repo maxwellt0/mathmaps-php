@@ -14,6 +14,9 @@ use yii\helpers\ArrayHelper;
  */
 class UsingStatus extends \yii\db\ActiveRecord
 {
+
+    public $cnt;
+
     /**
      * @inheritdoc
      */
@@ -51,6 +54,11 @@ class UsingStatus extends \yii\db\ActiveRecord
         return UsingStatus::findOne(['status_value' => $value])->id;
     }
 
+    public function getUserNotes()
+    {
+        return $this->hasMany(UserNote::className(), ['using_status_id' => 'id']);
+    }
+
     public static function getStatusList()
     {
         $tabs = UsingStatus::find()
@@ -59,4 +67,5 @@ class UsingStatus extends \yii\db\ActiveRecord
             ->all();
         return Arrayhelper::map($tabs, 'status_value', 'status_name');
     }
+
 }

@@ -8,9 +8,9 @@ use common\models\PermissionHelpers;
 /* @var $searchModel frontend\models\search\NoteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $usingTabs */
+/* @var $tabCounts */
 
-//$this->title = $model->user->username . "'s notes";
-$this->title = Yii::$app->user->identity->username . "'s notes";
+$this->title = "Записи " . Yii::$app->user->identity->username;
 $this->params['breadcrumbs'][] = ['label' => 'Profile', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     foreach ($usingTabs as $value => $tabName) {
-        echo Html::a($tabName, ['user-list', 'status' => $value], ['class' => 'btn btn-primary']) . ' ';
+        echo Html::a($tabName . ' <span class="badge">' . $tabCounts[$value] . '</span>', ['user-list', 'status' => $value], ['class' => 'btn btn-primary']) . ' ';
     }
     ?>
     <?= GridView::widget([

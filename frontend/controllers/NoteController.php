@@ -60,11 +60,13 @@ class NoteController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, $status);
 
         $usingTabs = UsingStatus::getStatusList();
+        $tabNotesCounts = UserNote::getNotesCountList($id);
 
         return $this->render('userList', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'usingTabs' => $usingTabs,
+            'tabCounts' => $tabNotesCounts
         ]);
     }
 
