@@ -16,35 +16,37 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'text')->textarea(['rows'=>10]); ?>
 
-    <?= $form->field($model, 'note_type_id')->dropDownList($model->noteTypeList,
-        ['prompt' => 'Please Choose One']);?>
+    <?= $form->field($model, 'note_type_id')
+        ->dropDownList(
+            $model->noteTypeList,
+            ['prompt' => '-Виберіть один-']
+        );?>
 
     <div class="row">
         <div class="col-md-3">
-            <div class="input-group">
+            <div class="input-group list-box-div">
                 <?= $form->field(
                     $model,
-                    'higherNotes',
-                    ['inputOptions'=>['size'=>8]]
+                    'higherNotes'
                 )->listBox(
                     $model->higherNotesList,
-                    ['multiple' =>true]
-                );?>
+                    ['multiple' =>true, 'class' => 'form-control list-box', 'size' => '8']
+                )->label('Використовує:');?>
             </div>
         </div>
 
         <div class="col-md-1">
-            <a id="toHigher" class="btn btn-info btn-add">
+            <a id="toHigher" class="btn btn-info link-button">
                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             </a>
-            <a id="fromHigher" class="btn btn-default btn-add">
+            <a id="fromHigher" class="btn btn-default link-button">
                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             </a>
         </div>
 
         <div class="col-md-4">
             <label for="assocNotes">Непід'єднані записи</label>
-            <select class="form-control" id="assocNotes" size="8" multiple title="Непід'єднані записи">
+            <select class="form-control link-form" id="assocNotes"  multiple title="Непід'єднані записи" size="8">
                 <?php foreach ($model -> otherNotesList as $id => $name) {
                     echo '<option value="' . $id . '">' . $name . '</option>';
                 } ?>
@@ -52,31 +54,33 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="col-md-1">
-            <a id="toLower" class="btn btn-info btn-add">
+            <a id="toLower" class="btn btn-info link-button">
                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             </a>
-            <a id="fromLower" class="btn btn-default btn-add">
+            <a id="fromLower" class="btn btn-default link-button">
                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             </a>
         </div>
 
         <div class="col-md-3">
-            <div class="input-group">
+            <div class="input-group list-box-div">
                 <?= $form->field(
                     $model,
-                    'lowerNotes',
-                    ['inputOptions'=>['size'=>8]]
+                    'lowerNotes'
                 )->listBox(
                     $model->lowerNotesList,
-                    ['multiple' =>true,]
-                );?>
+                    ['multiple' =>true, 'class' => 'form-control list-box', 'size' => '8']
+                )->label('Використовується у:');?>
             </div>
         </div>
     </div>
-
+<br>
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update',
-            ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?php
+            echo Html::submitButton($model->isNewRecord ? 'Створити' : 'Зберегти',
+            ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
+            echo Html::a('Відміна', ['view', 'id' => $model->id], ['class' => 'btn']);
+        ?>
     </div>
 
     <?php ActiveForm::end(); ?>

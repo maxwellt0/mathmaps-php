@@ -49,9 +49,9 @@ class Note extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Назва',
-            'note_status_id' => 'Note Status ID',
+            'note_status_id' => 'Статус запису',
             'text' => 'Текст',
-            'note_type_id' => 'Note Type ID',
+            'note_type_id' => 'Тип запису',
             'noteTypeName' => Yii::t('app', 'Тип Запису'),
         ];
     }

@@ -95,13 +95,13 @@ class NoteController extends Controller
             $linksModel[] = $link;
         }
 
-        $isUserNote = $this->isUserNote($id)? true : false;
+        $userNote = $this->findUserNote($id);
 
         return $this->render('view', [
             'noteModel' => $mainNote,
             'nodesModel' => $nodesModel,
             'linksModel' => $linksModel,
-            'isUserNote' => $isUserNote
+            'userNote' => $userNote
         ]);
     }
 
@@ -205,6 +205,15 @@ class NoteController extends Controller
         return $this->redirect(['view', 'id' => $id]);
     }
 
+    public function actionChangeStatus($noteId, $statusId)
+    {
+        $userNote = $this->findUserNote($noteId);
+        $userNote->using_status_id = $statusId;
+        $userNote->save();
+
+        return $this->redirect(['view', 'id' => $noteId]);
+    }
+
     /**
      * Finds the note model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -221,19 +230,14 @@ class NoteController extends Controller
         }
     }
 
-    /**
-     * @param $id
-     * @return bool
-     */
-    private function isUserNote($id)
+    private function findUserNote($noteId)
     {
         if (!Yii::$app->user->isGuest) {
-            $un = UserNote::find()
+            return UserNote::find()
                 ->where([
                     'user_id' => Yii::$app->user->identity->id,
-                    'note_id' => $id
+                    'note_id' => $noteId
                 ])->one();
-            return $un;
         } else {
             return false;
         }

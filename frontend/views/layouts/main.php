@@ -40,14 +40,13 @@ FontAwesomeAsset::register($this);
         ['label' => 'Головна', 'url' => ['/site/index']],
         ['label' => 'Записи', 'url' => ['/note/index']],
 //        ['label' => 'Карти', 'url' => ['/map/index']],
-//        ['label' => 'About', 'url' => ['/site/about']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Реєстрація', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Вхід', 'url' => ['/site/login']];
     } else {
         $ddownItems = [];
-        $ddownItems[] = ['label' => 'Профайл', 'url' => ['/profile/view']];
+        $ddownItems[] = ['label' => 'Профайл', 'url' => ['/note/user-list']];
         $ddownItems[] = '<li class="divider"></li>';
         $ddownItems[] = [
             'label' => 'Вийти',
@@ -85,7 +84,8 @@ FontAwesomeAsset::register($this);
 <footer class="footer">
     <div class="container">
         <p class="pull-left">
-            <?= Html::a('Контакти', Url::to('/site/contact')); ?>
+            <?= Html::a('Контакти ', Url::to('/site/contact')); ?>
+            <?php //Html::a('Про нас', Url::to('/site/about')); ?>
         </p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>

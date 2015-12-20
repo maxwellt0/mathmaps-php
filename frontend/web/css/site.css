@@ -97,3 +97,15 @@ a.desc:after {
     text-align: center;
     border-radius: 5px;
 }
+
+.link-button {
+    margin: 1em 1em 1em;
+}
+
+.list-box-div {
+    width: 100%;
+}
+
+.note-view-buttons {
+    margin-bottom: 5px;
+}

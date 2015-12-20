@@ -1,6 +1,8 @@
 <?php
 
+use yii\bootstrap\ButtonDropdown;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
 use frontend\widgets\dracula\Graph;
 
@@ -8,13 +10,13 @@ use frontend\widgets\dracula\Graph;
 /* @var $noteModel common\models\note */
 /* @var $nodesModel */
 /* @var $linksModel */
-/* @var $isUserNote */
+/* @var $userNote */
 
 $this->title = $noteModel->name;
-$this->params['breadcrumbs'][] = ['label' => 'Notes', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Записи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="note-view">
+<div class="note-view" id="note-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?= Graph::widget([
@@ -22,31 +24,54 @@ $this->params['breadcrumbs'][] = $this->title;
             'links' => $linksModel,
     ]); ?>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $noteModel->id], [
+    <div class="note-view-buttons">
+        <?php echo Html::a('Редагувати', ['update', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
+        <?php /* Html::a('Delete', ['delete', 'id' => $noteModel->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
-        <?= Html::a('View Map', ['view-map', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
-        <?php if (!$isUserNote) {
+        ])*/ ?>
+        <?= Html::a('Вся карта', ['view-map', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
+        <?php if (!$userNote) {
             echo Html::a('Вивчити', ['add-to-list', 'id' => $noteModel->id], ['class' => 'btn btn-primary']);
-        }  ?>
-    </p>
+        } else {
+            $buttons = ['btn-default', 'btn-info', 'btn-success', 'btn-warning', 'btn-danger',];
+            $droptions = [];
+            foreach($userNote->usingStatusList as $stId => $stName){
+                $droptions[] = [
+                    'label' => $stName,
+                    'url' => [
+                        'change-status',
+                        'noteId' => $noteModel->id,
+                        'statusId'=>$stId]
+                ];
+            }
+            echo ButtonDropdown::widget([
+                'label' => $userNote->usingStatus->status_name,
+                'dropdown' => [ 'items' =>$droptions ],
+                'options' => [
+                    'class' => 'btn status-button ' . $buttons[$userNote->usingStatus->status_value]
+                ]
+            ]);
+        } ?>
+    </div>
 
     <?= DetailView::widget([
         'model' => $noteModel,
         'attributes' => [
             'name',
             'noteTypeName',
-            'text:html',
+            'text:ntext',
         ],
     ]) ?>
 
 </div>
+<script type="text/javascript">
+    var viewWidth = document.getElementById("note-view").clientWidth;
+    var viewHeight = document.body.clientHeight*0.3;
+</script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
 </script>

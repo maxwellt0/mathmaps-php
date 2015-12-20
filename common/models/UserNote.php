@@ -50,6 +50,12 @@ class UserNote extends \yii\db\ActiveRecord
         return $this->hasOne(UsingStatus::className(), ['id' => 'using_status_id']);
     }
 
+    public static function getUsingStatusList()
+    {
+        $droptions = UsingStatus::find()->asArray()->all();
+        return Arrayhelper::map($droptions, 'id', 'status_name');
+    }
+
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);

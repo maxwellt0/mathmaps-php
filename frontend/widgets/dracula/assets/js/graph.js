@@ -2,8 +2,8 @@ var redraw, g, renderer;
 /* only do all this when document has finished loading (needed for RaphaelJS) */
 window.onload = function() {
 
-    var width = $(document).width()*0.6;
-    var height = $(document).height()*0.6;
+    var width = viewWidth;
+    var height = viewHeight;
 
     g = new Graph();
 
@@ -73,9 +73,9 @@ window.onload = function() {
         /* the default node drawing */
     };
 
-    g.addNode(nodes[0][0], { label : nodes[0][1], render: renderGreen});
+    g.addNode(nodes[0][0], { label : nodes[0][1],});
     for (var i=1; i<nodes.length; i++) {
-        g.addNode(nodes[i][0], { label : nodes[i][1], render: render});
+        g.addNode(nodes[i][0], { label : nodes[i][1], });
     }
 
     for (i=0; i<links.length; i++) {
