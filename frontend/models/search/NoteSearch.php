@@ -6,12 +6,12 @@ use common\models\UsingStatus;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\note;
+use common\models\Note;
 
 /**
  * NoteSearch represents the model behind the search form about `common\models\note`.
  */
-class NoteSearch extends note
+class NoteSearch extends Note
 {
     public $noteTypeName;
     public $note_type_id;

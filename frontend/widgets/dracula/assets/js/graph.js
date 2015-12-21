@@ -93,13 +93,12 @@ window.onload = function() {
         renderer.draw();
     };
 
-    var ellipse = document.getElementsByTagName("ellipse");
-    for (i= 0; i<ellipse.length; i++){
-        ellipse[i].addEventListener('dblclick',redirect,false);
+    var ellipses = document.getElementsByTagName("ellipse");
+    for (i=0; i<ellipses.length; i++){
+        ellipses[i].addEventListener('dblclick',redirect,false);
     }
 
     function redirect(){
-        //alert(this.id);
         window.location.href = '/index.php?r=note/view&id=' + this.id;
     }
 

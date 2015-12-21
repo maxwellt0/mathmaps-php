@@ -1,6 +1,7 @@
 <?php
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 use common\models\PermissionHelpers;
 
@@ -11,7 +12,7 @@ use common\models\PermissionHelpers;
 /* @var $tabCounts */
 
 $this->title = "Записи " . Yii::$app->user->identity->username;
-$this->params['breadcrumbs'][] = ['label' => 'Profile', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Профайл', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="profile-view">
@@ -28,9 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'name',
+            [
+                'attribute'=>'name',
+                'value'=>function ($data) {
+                    return Html::a(Html::encode($data->name), Url::to(['view', 'id' => $data->id]));
+                },
+                'format' => 'raw',
+            ],
             'noteTypeName',
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

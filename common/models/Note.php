@@ -82,7 +82,7 @@ class Note extends \yii\db\ActiveRecord
         return $this->noteStatus->status_name;
     }
 
-    public function getNoteStatusList()
+    public static function getNoteStatusList()
     {
         $droptions = NoteStatus::find()->asArray()->all();
         return Arrayhelper::map($droptions, 'id', 'status_name');
@@ -175,6 +175,11 @@ class Note extends \yii\db\ActiveRecord
             ->where(['user_note.note_id' => $this->id])
             ->joinWith(['userNoteLinks'])
             ->all();
+    }
+
+    public function countNoteUsers()
+    {
+        return sizeof($this->noteUsers);
     }
 
     public function getNoteUserLinks()

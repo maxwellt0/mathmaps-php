@@ -116,6 +116,11 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+    public function actionFuncAnReview()
+    {
+        return $this->render('funcAnReview');
+    }
+
     public function actionSignup()
     {
         $model = new SignupForm();

@@ -109,3 +109,13 @@ a.desc:after {
 .note-view-buttons {
     margin-bottom: 5px;
 }
+
+.index-img {
+    margin-bottom: 2em;
+    height: 80%;
+    width: 80%;
+}
+.index-img-div {
+    padding: 3em;
+}
+

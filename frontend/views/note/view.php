@@ -11,6 +11,7 @@ use frontend\widgets\dracula\Graph;
 /* @var $nodesModel */
 /* @var $linksModel */
 /* @var $userNote */
+/* @var boolean $userIsOwner */
 
 $this->title = $noteModel->name;
 $this->params['breadcrumbs'][] = ['label' => 'Записи', 'url' => ['index']];
@@ -18,14 +19,16 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="note-view" id="note-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?= Graph::widget([
             'nodes' => $nodesModel,
             'links' => $linksModel,
     ]); ?>
 
     <div class="note-view-buttons">
-        <?php echo Html::a('Редагувати', ['update', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
+        <?php
+        if ($userIsOwner) {
+            echo Html::a('Редагувати', ['update', 'id' => $noteModel->id], ['class' => 'btn btn-primary']);
+        } ?>
         <?php /* Html::a('Delete', ['delete', 'id' => $noteModel->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -34,27 +37,29 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ])*/ ?>
         <?= Html::a('Вся карта', ['view-map', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
-        <?php if (!$userNote) {
-            echo Html::a('Вивчити', ['add-to-list', 'id' => $noteModel->id], ['class' => 'btn btn-primary']);
-        } else {
-            $buttons = ['btn-default', 'btn-info', 'btn-success', 'btn-warning', 'btn-danger',];
-            $droptions = [];
-            foreach($userNote->usingStatusList as $stId => $stName){
-                $droptions[] = [
-                    'label' => $stName,
-                    'url' => [
-                        'change-status',
-                        'noteId' => $noteModel->id,
-                        'statusId'=>$stId]
-                ];
+        <?php if (!Yii::$app->user->isGuest) {
+            if (!$userNote) {
+                echo Html::a('Вивчити', ['add-to-list', 'id' => $noteModel->id], ['class' => 'btn btn-primary']);
+            } else {
+                $buttons = ['btn-default', 'btn-info', 'btn-success', 'btn-warning', 'btn-danger',];
+                $droptions = [];
+                foreach($userNote->usingStatusList as $stId => $stName){
+                    $droptions[] = [
+                        'label' => $stName,
+                        'url' => [
+                            'change-status',
+                            'noteId' => $noteModel->id,
+                            'statusId'=>$stId]
+                    ];
+                }
+                echo ButtonDropdown::widget([
+                    'label' => $userNote->usingStatus->status_name,
+                    'dropdown' => [ 'items' =>$droptions ],
+                    'options' => [
+                        'class' => 'btn status-button ' . $buttons[$userNote->usingStatus->status_value]
+                    ]
+                ]);
             }
-            echo ButtonDropdown::widget([
-                'label' => $userNote->usingStatus->status_name,
-                'dropdown' => [ 'items' =>$droptions ],
-                'options' => [
-                    'class' => 'btn status-button ' . $buttons[$userNote->usingStatus->status_value]
-                ]
-            ]);
         } ?>
     </div>
 

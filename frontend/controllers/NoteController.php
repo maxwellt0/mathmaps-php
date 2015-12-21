@@ -6,7 +6,7 @@ use common\models\User;
 use common\models\UserNote;
 use common\models\UsingStatus;
 use Yii;
-use common\models\note;
+use common\models\Note;
 use frontend\models\search\NoteSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -96,12 +96,15 @@ class NoteController extends Controller
         }
 
         $userNote = $this->findUserNote($id);
+        $isPublished = $mainNote->noteStatus->status_value;
+        $userIsOwner = ($userNote && !$isPublished) ? true : false;
 
         return $this->render('view', [
             'noteModel' => $mainNote,
             'nodesModel' => $nodesModel,
             'linksModel' => $linksModel,
-            'userNote' => $userNote
+            'userNote' => $userNote,
+            'userIsOwner' => $userIsOwner
         ]);
     }
 
