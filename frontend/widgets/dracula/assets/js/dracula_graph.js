@@ -209,7 +209,7 @@ Graph.Renderer.Raphael.prototype = {
     },
 
     draw: function() {
-        this.factorX = (this.width - 2 * this.radius) / (this.graph.layoutMaxX - this.graph.layoutMinX);
+        this.factorX = (this.width - 3.5 * this.radius) / (this.graph.layoutMaxX - this.graph.layoutMinX); //drawing borders
         this.factorY = (this.height - 2 * this.radius) / (this.graph.layoutMaxY - this.graph.layoutMinY);
         for (i in this.graph.nodes) {
             this.drawNode(this.graph.nodes[i]);
