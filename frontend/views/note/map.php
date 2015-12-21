@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = 'Карта';
 ?>
 <div class="note-map" id="note-map">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?= Graph::widget([
         'nodes' => $nodesModel,
         'links' => $linksModel,
