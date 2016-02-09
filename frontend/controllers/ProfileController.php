@@ -50,69 +50,28 @@ class ProfileController extends Controller
                 'model' => $this->findModel($already_exists),
             ]);
         } else {
-            return $this->redirect(['create']);
-        }
-    }
-
-    public function actionView() // try just call actionIndex()
-    {
-        if ($already_exists = RecordHelpers::userHas('profile')) {
-            return $this->render('view', [
-                'model' => $this->findModel($already_exists),
-            ]);
-        } else {
-            return $this->redirect(['create']);
-        }
-    }
-
-
-    public function actionCreate()
-    {
-        $model = new Profile;
-        $model->user_id = Yii::$app->user->identity->id;
-        if ($already_exists = RecordHelpers::userHas('profile')) {
-            return $this->render('view', [
-                'model' => $this->findModel($already_exists),
-            ]);
-        } elseif ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view']);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->redirect(['update']);
         }
     }
 
     public function actionUpdate()
     {
-        PermissionHelpers::requireUpgradeTo('Paid');
+        $model = new Profile;
+        $model->user_id = Yii::$app->user->identity->id;
 
-        if ($model = Profile::find()->where(['user_id' =>
-            Yii::$app->user->identity->id])->one()
-        ) {
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view']);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+//        if ($already_exists = RecordHelpers::userHas('profile')) {
+//            return $this->render('view', [
+//                'model' => $this->findModel($already_exists),
+//            ]);
+//        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view']);
         } else {
-            throw new NotFoundHttpException('No Such Profile.');
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
-    }
-
-    /**
-     * Deletes an existing Profile model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**

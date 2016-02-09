@@ -7,8 +7,8 @@ use common\models\PermissionHelpers;
  * @var yii\web\View $this
  * @var frontend\models\Profile $model
  */
-$this->title = $model->user->username . "'s Profile";
-$this->params['breadcrumbs'][] = ['label' => 'Profile', 'url' => ['index']];
+$this->title = "Профайл " . $model->user->username;
+$this->params['breadcrumbs'][] = ['label' => 'Профайл', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="profile-view">
@@ -18,29 +18,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <?Php
         //this is not necessary but in here as example
         if (PermissionHelpers::userMustBeOwner('profile', $model->id)) {
-            echo Html::a('Update', ['update', 'id' => $model->id],
+            echo Html::a('Редагувати', ['update', 'id' => $model->id],
                 ['class' => 'btn btn-primary']);
         } ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
     </p>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-//'id',
-            'user.username',
             'first_name',
-            'last_name',
             'birthdate',
             'gender.gender_name',
             'created_at',
             'updated_at',
-//'user_id',
         ],
     ]) ?>
 </div>

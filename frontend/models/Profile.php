@@ -16,8 +16,7 @@ use yii\db\Expression;
  *
  * @property string $id
  * @property string $user_id
- * @property string $first_name
- * @property string $last_name
+ * @property string $name
  * @property string $birthdate
  * @property string $gender_id
  * @property string $created_at
@@ -62,7 +61,7 @@ class Profile extends \yii\db\ActiveRecord
         return [
             [['user_id', 'gender_id'], 'required'],
             [['user_id', 'gender_id'], 'integer'],
-            [['first_name', 'last_name'], 'string'],
+            [['first_name'], 'string'],
             [['birthdate', 'created_at', 'updated_at'], 'safe'],
             [['gender_id'], 'in', 'range' => array_keys($this->getGenderList())],
         ];
@@ -75,16 +74,15 @@ class Profile extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
-            'birthdate' => 'Birthdate',
-            'gender_id' => 'Gender ID',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'genderName' => Yii::t('app', 'Gender'),
-            'userLink' => Yii::t('app', 'User'),
-            'profileIdLink' => Yii::t('app', 'Profile'),
+            'user_id' => 'ID Користувача',
+            'first_name' => 'Ім\'я',
+            'birthdate' => 'Дата народження',
+            'gender_id' => 'Стать',
+            'created_at' => 'Зареєстровано',
+            'updated_at' => 'Останній візит',
+            'genderName' => Yii::t('app', 'Стать'),
+            'userLink' => Yii::t('app', 'Користувач'),
+            'profileIdLink' => Yii::t('app', 'Профайл'),
         ];
     }
 

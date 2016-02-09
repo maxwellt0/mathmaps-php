@@ -84,7 +84,7 @@ FontAwesomeAsset::register($this);
 <footer class="footer">
     <div class="container">
         <p class="pull-left">
-            <?= Html::a('Контакти ', Url::to('/site/contact')); ?>
+            <?= Html::a('Контакти ', Url::to(['site/contact'])); ?>
             <?php //Html::a('Про нас', Url::to('/site/about')); ?>
         </p>
 
