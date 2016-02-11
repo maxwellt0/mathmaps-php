@@ -80,9 +80,10 @@ class Profile extends \yii\db\ActiveRecord
             'gender_id' => 'Стать',
             'created_at' => 'Зареєстровано',
             'updated_at' => 'Останній візит',
+            'user.eamil' => 'Email',
             'genderName' => Yii::t('app', 'Стать'),
-            'userLink' => Yii::t('app', 'Користувач'),
-            'profileIdLink' => Yii::t('app', 'Профайл'),
+            'userLink' => Yii::t('app', 'User'),
+            'profileIdLink' => Yii::t('app', 'Profile'),
         ];
     }
 

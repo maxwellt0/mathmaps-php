@@ -17,17 +17,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?Php
         //this is not necessary but in here as example
-        if (PermissionHelpers::userMustBeOwner('profile', $model->id)) {
+        /*if (PermissionHelpers::userMustBeOwner('profile', $model->id)) {
             echo Html::a('Редагувати', ['update', 'id' => $model->id],
                 ['class' => 'btn btn-primary']);
-        } ?>
+        } */
+        ?>
     </p>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'first_name',
+            'user.email',
             'birthdate',
-            'gender.gender_name',
+            'genderName',
             'created_at',
             'updated_at',
         ],

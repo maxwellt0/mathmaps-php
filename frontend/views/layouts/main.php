@@ -46,7 +46,9 @@ FontAwesomeAsset::register($this);
         $menuItems[] = ['label' => 'Вхід', 'url' => ['/site/login']];
     } else {
         $ddownItems = [];
-        $ddownItems[] = ['label' => 'Профайл', 'url' => ['/note/user-list']];
+        $ddownItems[] = ['label' => 'Профайл', 'url' => ['/profile']];
+        $ddownItems[] = ['label' => 'Мої записи', 'url' => ['/note/user-list']];
+        $ddownItems[] = ['label' => 'Налаштування', 'url' => ['/profile/update']];
         $ddownItems[] = '<li class="divider"></li>';
         $ddownItems[] = [
             'label' => 'Вийти',
