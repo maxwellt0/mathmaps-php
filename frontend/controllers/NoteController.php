@@ -96,15 +96,17 @@ class NoteController extends Controller
         }
 
         $userNote = $this->findUserNote($id);
-        $isPublished = $mainNote->noteStatus->status_value;
+        $isPublished = $mainNote->noteStatus->status_value == 1;
         $userIsOwner = ($userNote && !$isPublished) ? true : false;
+        $publStatus = $mainNote->noteStatusValue;
 
         return $this->render('view', [
             'noteModel' => $mainNote,
             'nodesModel' => $nodesModel,
             'linksModel' => $linksModel,
             'userNote' => $userNote,
-            'userIsOwner' => $userIsOwner
+            'userIsOwner' => $userIsOwner,
+            'publStatus' => $publStatus
         ]);
     }
 
@@ -154,8 +156,9 @@ class NoteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $note = Yii::$app->request->post('Note');
-            $model->linkLowerNotes($note['lowerNotesList']);
-            $model->linkHigherNotes($note['higherNotesList']);
+            $model->linkLowerNotes($note['lowerNotes']);
+            $model->linkHigherNotes($note['higherNotes']);
+            $model->linkNoteToUser(Yii::$app->user->identity->id);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -173,8 +176,11 @@ class NoteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $userNote = $this->findUserNote($id);
+        $isPublished = $model->noteStatus->status_value == 1;
+        $userIsOwner = ($userNote && !$isPublished) ? true : false;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($userIsOwner && $model->load(Yii::$app->request->post()) && $model->save()) {
             $note = Yii::$app->request->post('Note');
             $model->linkLowerNotes($note['lowerNotes']);
             $model->linkHigherNotes($note['higherNotes']);
@@ -194,9 +200,17 @@ class NoteController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if ($this->isUserOwner($id)) {
+            $this->findModel($id)->unlinkAndDelete();
+        } else {
+            $userId = Yii::$app->user->identity->id;
+            UserNote::deleteUserNote($id,$userId);
+        }
+        Yii::$app->getSession()->setFlash(
+            'success','Запис видалено'
+        );
 
-        return $this->redirect(['index']);
+        return $this->redirect(['user-list']);
     }
 
     public function actionAddToList($id)
@@ -215,6 +229,25 @@ class NoteController extends Controller
         $userNote->save();
 
         return $this->redirect(['view', 'id' => $noteId]);
+    }
+
+
+    public function actionOffer($id)
+    {
+        $model = $this->findModel($id);
+        $userNote = $this->findUserNote($id);
+        $isPublished = $model->noteStatus->status_value == 1;
+        $userIsOwner = ($userNote && !$isPublished) ? true : false;
+
+        if ($userIsOwner) {
+            $model->note_status_id = 3;
+            $model->save();
+            Yii::$app->getSession()->setFlash(
+                'success','Запропоновано до публікації'
+            );
+        }
+
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     /**
@@ -244,6 +277,19 @@ class NoteController extends Controller
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param $id
+     * @throws NotFoundHttpException
+     */
+    private function isUserOwner($id)
+    {
+        $note = $this->findModel($id);
+        $userNote = $this->findUserNote($id);
+        $isPublished = $note->noteStatus->status_value == 1;
+
+        return ($userNote && !$isPublished) ? true : false;
     }
 
 //    protected function getUser($username)

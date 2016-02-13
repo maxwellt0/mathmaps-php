@@ -23,6 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
     foreach ($usingTabs as $value => $tabName) {
         echo Html::a($tabName . ' <span class="badge">' . $tabCounts[$value] . '</span>', ['user-list', 'status' => $value], ['class' => 'btn btn-primary']) . ' ';
     }
+    echo Html::a('<i class="fa fa-plus"></i>' . ' Створити', ['create'], ['class' => 'btn btn-primary pull-right']);
+
     ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

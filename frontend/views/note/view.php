@@ -25,18 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <div class="note-view-buttons">
-        <?php
-        if ($userIsOwner) {
-            echo Html::a('Редагувати', ['update', 'id' => $noteModel->id], ['class' => 'btn btn-primary']);
-        } ?>
-        <?php /* Html::a('Delete', ['delete', 'id' => $noteModel->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ])*/ ?>
-        <?= Html::a('Вся карта', ['view-map', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) ?>
         <?php if (!Yii::$app->user->isGuest) {
             if (!$userNote) {
                 echo Html::a('Вивчити', ['add-to-list', 'id' => $noteModel->id], ['class' => 'btn btn-primary']);
@@ -61,6 +49,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             }
         } ?>
+
+        <?php
+        if ($userIsOwner) {
+            echo Html::a('<i class="fa fa-pencil"></i>' . ' Редагувати', ['update', 'id' => $noteModel->id], ['class' => 'btn btn-primary']) . " ";
+            echo Html::a('<i class="fa fa-times"></i>' . ' Видалити', ['delete', 'id' => $noteModel->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Ви підтверджуєте видалення?',
+                    'method' => 'post',
+                ],
+            ]);
+
+            /** @var int $publStatus */
+            if ($publStatus == 0) {
+                $btnStyle = "btn-primary";
+                $btnDisabled = false;
+            } elseif ($publStatus == 2) {
+                $btnStyle = "btn-succes disabled";
+                $btnDisabled = true;
+            }
+            echo Html::a('<i class="fa fa-hand-o-up"></i>' . ' Опублікувати', ['offer', 'id' => $noteModel->id], ['class' => 'btn ' . $btnStyle, 'disabled' => $btnDisabled]);
+        } ?>
+
+        <?= Html::a('<i class="fa fa-expand"></i>' . ' Вся карта', ['view-map', 'id' => $noteModel->id], ['class' => 'btn btn-primary pull-right']) ?>
     </div>
 
     <?= DetailView::widget([

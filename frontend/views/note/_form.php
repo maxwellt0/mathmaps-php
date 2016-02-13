@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'note_type_id')
         ->dropDownList(
             $model->noteTypeList,
-            ['prompt' => '-Виберіть один-']
+            ['prompt' => '- Виберіть тип запису -']
         );?>
 
     <div class="row">
@@ -77,9 +77,10 @@ use yii\widgets\ActiveForm;
 <br>
     <div class="form-group">
         <?php
+            $cancelLink = $model->isNewRecord ? ['/profile'] : ['view', 'id' => $model->id];
             echo Html::submitButton($model->isNewRecord ? 'Створити' : 'Зберегти',
             ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
-            echo Html::a('Відміна', ['view', 'id' => $model->id], ['class' => 'btn']);
+            echo Html::a('Відміна', $cancelLink, ['class' => 'btn']);
         ?>
     </div>
 

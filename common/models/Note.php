@@ -82,6 +82,11 @@ class Note extends \yii\db\ActiveRecord
         return $this->noteStatus->status_name;
     }
 
+    public function getNoteStatusValue()
+    {
+        return $this->noteStatus->status_value;
+    }
+
     public static function getNoteStatusList()
     {
         $droptions = NoteStatus::find()->asArray()->all();
@@ -190,6 +195,8 @@ class Note extends \yii\db\ActiveRecord
         );
     }
 
+    /* it can be done by function 'link()' ?
+     http://stackoverflow.com/questions/26763298/how-do-i-work-with-many-to-many-relations-in-yii2 */
     public function linkNoteToUser($userId)
     {
         $statusId = UsingStatus::getIdByValue(0);
@@ -199,6 +206,20 @@ class Note extends \yii\db\ActiveRecord
             'using_status_id' => $statusId
         ]);
         $this->link('noteUserLinks', $link);
+    }
+
+    public function unlinkAndDelete()
+    {
+        $userNotes = UserNote::findAll([
+            'note_id' => $this->id
+        ]);
+        foreach ($userNotes as $un){
+            $un->delete();
+        }
+        $this->unlinkAll('lowerNotes', $this->lowerNotes);
+        $this->unlinkAll('higherNotes', $this->higherNotes);
+        $this->save();
+        $this->delete();
     }
 
 }

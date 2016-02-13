@@ -79,4 +79,13 @@ class UserNote extends \yii\db\ActiveRecord
         }
         return $countsMap;
     }
+
+    public static function deleteUserNote($noteId, $userId)
+    {
+        $userNote = UserNote::findOne([
+            'user_id' => $userId,
+            'note_id' => $noteId
+            ])->delete();
+        return true;
+    }
 }
