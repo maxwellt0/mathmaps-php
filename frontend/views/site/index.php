@@ -12,30 +12,37 @@ $this->title = 'MathMaps';
 
 <div class="site-index">
 
-    <div class="row index-img-div">
-        <div class="col-md-6">
-            <?= Html::a(
-                    Html::img('@web/images/1dosl.png', ['class' => 'index-img img-responsive']),
-                ['/site/func-an-review']
-            ) ?>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Дивись на речі широко</h1>
+            <?=file_get_contents('http://loripsum.net/api/3/short/'); ?>
         </div>
-        <div class="col-md-6">
-            <?= Html::a(
-                Html::img('@web/images/2znah.png', ['class' => 'index-img img-responsive']),
-                ['/note/index']
-            ) ?>
+        <div class="col-md-4">
+            <?php //Html::img('@web/images/3ruh.png', ['class' => 'index-img img-responsive']); ?>
         </div>
-        <div class="col-md-6">
-            <?= Html::a(
-                Html::img('@web/images/3ruh.png', ['class' => 'index-img img-responsive']),
-                ['/note/view-map', 'id'=>'14']
-            ) ?>
+    </div>
+    <div class="row">
+        <div class="col-md-8 pull-right">
+            <h1>Тримай навчання під контролем</h1>
+            <?=file_get_contents('http://loripsum.net/api/3/short/'); ?>
         </div>
-        <div class="col-md-6">
-            <?= Html::a(
-                Html::img('@web/images/4vivch.png', ['class' => 'index-img img-responsive']),
-                ['/note/view', 'id'=>'14']
-            ) ?>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Прискорюйся</h1>
+            <?=file_get_contents('http://loripsum.net/api/3/short/'); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 pull-right">
+            <h1>Відкривай нові території</h1>
+            <?=file_get_contents('http://loripsum.net/api/3/short/'); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Вивантажуй</h1>
+            <?=file_get_contents('http://loripsum.net/api/3/short/'); ?>
         </div>
     </div>
 </div>
