@@ -82,7 +82,7 @@ if (!Yii::$app->user->isGuest) {
     </div>
     <footer class="footer">
         <div class="container">
-            <p class="pull-left">&copy; Yii 2 Build <?= date('Y') ?></p>
+            <p class="pull-left">&copy; MathMaps <?= date('Y') ?></p>
             <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
