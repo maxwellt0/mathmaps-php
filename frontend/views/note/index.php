@@ -1,5 +1,7 @@
 <?php
 
+use common\models\NoteType;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -27,7 +29,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'format' => 'raw',
             ],
-            'noteTypeName',
+            [
+                'attribute' => 'note_type_id',
+                'value' => 'noteTypeName',
+                'filter' => Html::activeDropDownList(
+                    $searchModel,
+                    'note_type_id',
+                    ArrayHelper::map(
+                        NoteType::find()->asArray()->all(),
+                        'id',
+                        'type_name'
+                    ),
+                    ['class'=>'form-control','prompt' => '- Виберіть тип -']
+                ),
+            ]
         ],
     ]); ?>
 

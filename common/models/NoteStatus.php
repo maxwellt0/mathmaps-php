@@ -14,6 +14,9 @@ use yii\helpers\ArrayHelper;
  */
 class NoteStatus extends \yii\db\ActiveRecord
 {
+
+    public $cnt;
+
     /**
      * @inheritdoc
      */
@@ -51,7 +54,7 @@ class NoteStatus extends \yii\db\ActiveRecord
         return UsingStatus::findOne(['status_value' => $value])->id;
     }
 
-    public static function getStatusList()
+    public static function getStatusMap()
     {
         $tabs = NoteStatus::find()
             ->orderBy('status_value ASC')
@@ -59,4 +62,31 @@ class NoteStatus extends \yii\db\ActiveRecord
             ->all();
         return Arrayhelper::map($tabs, 'status_value', 'status_name');
     }
+
+    public static function getNotesCountsMap()
+    {
+        $counts = NoteStatus::find()
+            ->select('status_value, COUNT(status_value) AS cnt')
+            ->where(['is not', 'note.id', null])
+            ->joinWith(['notes'])
+            ->groupBy('status_value')
+            ->orderBy('status_value')
+            ->all();
+        $countsMap = Arrayhelper::map($counts, 'status_value', 'cnt');
+        $tabs = NoteStatus::getStatusMap();
+        // if there are no notes with certain status value
+        foreach ($tabs as $value=>$name){
+            if (!array_key_exists($value, $countsMap)) {
+                $countsMap[$value] = 0;
+            }
+        }
+        return $countsMap;
+    }
+
+    public function getNotes()
+    {
+        return $this->hasMany(Note::className(), ['note_status_id' => 'status_value']);
+    }
+
+
 }

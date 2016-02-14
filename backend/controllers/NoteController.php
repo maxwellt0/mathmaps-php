@@ -32,17 +32,19 @@ class NoteController extends Controller
      * Lists all note models.
      * @return mixed
      */
-    public function actionIndex($status = 0)
+    public function actionIndex($status = 1)
     {
         $searchModel = new NoteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $status);
 
-        $statusTabs = NoteStatus::getStatusList();
+        $statusTabs = NoteStatus::getStatusMap();
+        $tabCounts = NoteStatus::getNotesCountsMap();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'statusTabs' => $statusTabs,
+            'tabCounts' => $tabCounts
         ]);
     }
 
@@ -53,73 +55,67 @@ class NoteController extends Controller
      */
     public function actionView($id)
     {
-        $mainNote = $this->findModel($id);
+//        $mainNote = $this->findModel($id);
+//
+//        $lowerNotes = $mainNote->lowerNotes;
+//        $mainNoteName = $mainNote->name;
+//        $mainNoteId = $mainNote->id;
+//
+//        $node = [$mainNoteId, $mainNoteName];
+//        $nodesModel = [$node];
+//        $linksModel = [];
+//
+//        foreach ($lowerNotes as $note) {
+//            $node = [$note->id, $note->name];
+//            $nodesModel[] = $node;
+//
+//            $link = [$note->id, $mainNoteId];
+//            $linksModel[] = $link;
+//        }
+//
+//        return $this->render('view', [
+//            'noteModel' => $mainNote,
+//            'nodesModel' => $nodesModel,
+//            'linksModel' => $linksModel,
+//        ]);
 
-        $lowerNotes = $mainNote->lowerNotes;
-        $mainNoteName = $mainNote->name;
-        $mainNoteId = $mainNote->id;
-
-        $node = [$mainNoteId, $mainNoteName];
-        $nodesModel = [$node];
-        $linksModel = [];
-
-        foreach ($lowerNotes as $note) {
-            $node = [$note->id, $note->name];
-            $nodesModel[] = $node;
-
-            $link = [$note->id, $mainNoteId];
-            $linksModel[] = $link;
-        }
-
-        $un = UserNote::find()
-            ->where([
-                'user_id' => Yii::$app->user->identity->id,
-                'note_id' => $id
-            ])->one();
-        $isUserNote = $un? true : false;
-
-        return $this->render('view', [
-            'noteModel' => $mainNote,
-            'nodesModel' => $nodesModel,
-            'linksModel' => $linksModel,
-            'isUserNote' => $isUserNote
-        ]);
+        $this->redirect('http://yii2build.com/note/'.$id);
     }
 
-    public function actionViewMap($id)
-    {
-        $mainNote = $this->findModel($id);
-
-        $lowerNotes = $mainNote->lowerNotes;
-        $higherNotes = $mainNote->higherNotes;
-        $mainNoteName = $mainNote->name;
-        $mainNoteId = $mainNote->id;
-
-        $node = [$mainNoteId, $mainNoteName];
-        $nodesModel = [$node];
-        $linksModel = [];
-
-        foreach ($lowerNotes as $note) {
-            $node = [$note->id, $note->name];
-            $nodesModel[] = $node;
-
-            $link = [$note->id, $mainNoteId];
-            $linksModel[] = $link;
-        }
-        foreach ($higherNotes as $note) {
-            $node = [$note->id, $note->name];
-            $nodesModel[] = $node;
-
-            $link = [$mainNoteId, $note->id];
-            $linksModel[] = $link;
-        }
-
-        return $this->render('map', [
-            'noteModel' => $mainNote,
-            'nodesModel' => $nodesModel,
-            'linksModel' => $linksModel,
-        ]);
-    }
+//    public function actionViewMap($id)
+//    {
+//        $mainNote = $this->findModel($id);
+//
+//        $lowerNotes = $mainNote->lowerNotes;
+//        $higherNotes = $mainNote->higherNotes;
+//        $mainNoteName = $mainNote->name;
+//        $mainNoteId = $mainNote->id;
+//
+//        $node = [$mainNoteId, $mainNoteName];
+//        $nodesModel = [$node];
+//        $linksModel = [];
+//
+//        foreach ($lowerNotes as $note) {
+//            $node = [$note->id, $note->name];
+//            $nodesModel[] = $node;
+//
+//            $link = [$note->id, $mainNoteId];
+//            $linksModel[] = $link;
+//        }
+//        foreach ($higherNotes as $note) {
+//            $node = [$note->id, $note->name];
+//            $nodesModel[] = $node;
+//
+//            $link = [$mainNoteId, $note->id];
+//            $linksModel[] = $link;
+//        }
+//
+//        return $this->render('map', [
+//            'noteModel' => $mainNote,
+//            'nodesModel' => $nodesModel,
+//            'linksModel' => $linksModel,
+//        ]);
+//    }
 
     public function actionCreate()
     {
@@ -127,8 +123,9 @@ class NoteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $note = Yii::$app->request->post('Note');
-            $model->linkLowerNotes($note['lowerNotesList']);
-            $model->linkHigherNotes($note['higherNotesList']);
+            $model->linkLowerNotes($note['lowerNotes']);
+            $model->linkHigherNotes($note['higherNotes']);
+            $model->linkNoteToUser(Yii::$app->user->identity->id);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -167,7 +164,37 @@ class NoteController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id)->unlinkAndDelete();
+        Yii::$app->getSession()->setFlash(
+            'success','Запис видалено'
+        );
+
+        return $this->redirect(['index']);
+    }
+
+
+    public function actionAccept($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->note_status_id = 1;
+        $model->save();
+        Yii::$app->getSession()->setFlash(
+            'success','Запис опубліковано'
+        );
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionDeny($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->note_status_id = 3;
+        $model->save();
+        Yii::$app->getSession()->setFlash(
+            'success','Публікацію запису відхилено'
+        );
 
         return $this->redirect(['index']);
     }

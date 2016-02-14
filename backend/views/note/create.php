@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\note */
 
-$this->title = 'Create Note';
-$this->params['breadcrumbs'][] = ['label' => 'Notes', 'url' => ['index']];
+$this->title = 'Створити запис';
+$this->params['breadcrumbs'][] = ['label' => 'Записи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="note-create">

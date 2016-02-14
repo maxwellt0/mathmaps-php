@@ -59,7 +59,7 @@ class UsingStatus extends \yii\db\ActiveRecord
         return $this->hasMany(UserNote::className(), ['using_status_id' => 'id']);
     }
 
-    public static function getStatusList()
+    public static function getStatusMap()
     {
         $tabs = UsingStatus::find()
             ->orderBy('status_value ASC')

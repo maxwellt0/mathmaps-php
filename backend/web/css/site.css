@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    background-image: url("../images/dark_embroidery.png");
 }
 
 .wrap {
@@ -12,6 +13,10 @@ body {
 
 .wrap > .container {
     padding: 70px 15px 20px;
+}
+
+.main-container {
+    background-color: #eeeeee;
 }
 
 .footer {
@@ -89,3 +94,16 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+.link-button {
+    margin: 1em 1em 1em;
+}
+
+.list-box-div {
+    width: 100%;
+}
+
+.note-view-buttons {
+    margin-bottom: 5px;
+}
+

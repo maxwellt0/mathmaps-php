@@ -32,7 +32,7 @@ FontAwesomeAsset::register($this);
 $is_admin = ValueHelpers::getRoleValue('Admin');
 if (!Yii::$app->user->isGuest) {
     NavBar::begin([
-        'brandLabel' => 'Yii 2 Build <i class="fa fa-plug"></i> Admin',
+        'brandLabel' => 'MathMaps <i class="fa fa-globe"></i> Адмін',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -40,7 +40,7 @@ if (!Yii::$app->user->isGuest) {
     ]);
 } else {
     NavBar::begin([
-        'brandLabel' => 'Yii 2 Build <i class="fa fa-plug"></i>',
+        'brandLabel' => 'MathMaps <i class="fa fa-globe"></i>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -48,23 +48,51 @@ if (!Yii::$app->user->isGuest) {
     ]);
 } // it would be somewhere else
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Головна', 'url' => ['/site/index']],
     ];
     if (!Yii::$app->user->isGuest
         && Yii::$app->user->identity->role_id >= $is_admin
     ) {
-        $menuItems[] = ['label' => 'Users', 'url' => ['user/index']];
-        $menuItems[] = ['label' => 'Profiles', 'url' => ['profile/index']];
-        $menuItems[] = ['label' => 'Roles', 'url' => ['/role/index']];
-        $menuItems[] = ['label' => 'User Types', 'url' => ['/user-type/index']];
-        $menuItems[] = ['label' => 'Statuses', 'url' => ['/status/index']];
+        $userDdown = [];
+        $userDdown[] = ['label' => 'Користувачі', 'url' => ['user/index']];
+        $userDdown[] = ['label' => 'Профайли', 'url' => ['profile/index']];
+        $userDdown[] =  ['label' => 'Ролі', 'url' => ['/role/index']];
+        $userDdown[] = ['label' => 'Типи', 'url' => ['/user-type/index']];
+        $userDdown[] = ['label' => 'Статуси', 'url' => ['/status/index']];
+
+        $noteDdown = [];
+        $noteDdown[] = ['label' => 'Записи', 'url' => ['note/index']];
+        $noteDdown[] = ['label' => 'Типи', 'url' => ['note-type/index']];
+        $noteDdown[] = ['label' => 'Статуси', 'url' => ['note-status/index']];
+
     }
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Вхід', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = ['label' =>
-            'Logout (' . Yii::$app->user->identity->username . ')',
-            'url' => ['/site/logout']];
+        $ddownItems = [];
+        $ddownItems[] = [
+            'label' => 'Вийти',
+            'url' => ['/site/logout'],
+            'linkOptions' => ['data-method' => 'post']
+        ];
+
+        $menuItems[] = [
+            'label' => 'Записи',
+            'items' => $noteDdown,
+            'options' => ['style' => 'font-weight: bold']
+        ];
+
+        $menuItems[] = [
+            'label' => 'Користувачі',
+            'items' => $userDdown,
+            'options' => ['style' => 'font-weight: bold']
+        ];
+
+        $menuItems[] = [
+            'label' => Yii::$app->user->identity->username,
+            'items' => $ddownItems,
+            'options' => ['style' => 'font-weight: bold']
+        ];
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
@@ -72,7 +100,7 @@ if (!Yii::$app->user->isGuest) {
     ]);
     NavBar::end();
 ?>
-    <div class="container">
+    <div class="container main-container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ?
                 $this->params['breadcrumbs'] : [],

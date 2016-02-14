@@ -59,7 +59,7 @@ class NoteController extends Controller
         $id = Yii::$app->user->identity->id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, $status);
 
-        $usingTabs = UsingStatus::getStatusList();
+        $usingTabs = UsingStatus::getStatusMap();
         $tabNotesCounts = UserNote::getNotesCountList($id);
 
         return $this->render('userList', [
@@ -240,7 +240,7 @@ class NoteController extends Controller
         $userIsOwner = ($userNote && !$isPublished) ? true : false;
 
         if ($userIsOwner) {
-            $model->note_status_id = 3;
+            $model->note_status_id = 2;
             $model->save();
             Yii::$app->getSession()->setFlash(
                 'success','Запропоновано до публікації'

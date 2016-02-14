@@ -71,7 +71,7 @@ class UserNote extends \yii\db\ActiveRecord
             ->orderBy('status_value')
             ->all();
         $countsMap = Arrayhelper::map($counts, 'status_value', 'cnt');
-        $tabs = UsingStatus::getStatusList();
+        $tabs = UsingStatus::getStatusMap();
         foreach ($tabs as $value=>$name){
             if (!array_key_exists($value, $countsMap)) {
                 $countsMap[$value] = 0;
