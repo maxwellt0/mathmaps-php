@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\NoteType */
 
-$this->title = 'Update Note Type: ' . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Note Types', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Редагувати тип запису: ' . ' ' . $model->type_name;
+$this->params['breadcrumbs'][] = ['label' => 'Типи записів', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->type_name, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Редагувати';
 ?>
 <div class="note-type-update">
 

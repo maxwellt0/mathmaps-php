@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\NoteType */
+/* @var $model common\models\NoteStatus */
 
-$this->title = $model->type_name;
-$this->params['breadcrumbs'][] = ['label' => 'Типи записів', 'url' => ['index']];
+$this->title = $model->status_name;
+$this->params['breadcrumbs'][] = ['label' => 'Статуси записів', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="note-type-view">
+<div class="note-status-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,7 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'type_name',
+            'status_value',
+            'status_name'
         ],
     ]) ?>
 

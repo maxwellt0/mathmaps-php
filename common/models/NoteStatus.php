@@ -44,8 +44,8 @@ class NoteStatus extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'status_name' => 'Status Name',
-            'status_value' => 'Status Value',
+            'status_name' => 'Назва статусу',
+            'status_value' => 'Значення',
         ];
     }
 

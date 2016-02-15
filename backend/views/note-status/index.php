@@ -5,13 +5,13 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\search\NoteTypeSearch */
+/* @var $searchModel backend\models\search\NoteStatusSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Типи записів';
+$this->title = 'Статуси записів';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="note-type-index">
+<div class="note-status-index">
 
     <h1><?= Html::encode($this->title) ?>
         <?= Html::a(
@@ -26,10 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             'id',
+            'status_value',
             [
-                'attribute'=>'type_name',
+                'attribute'=>'status_name',
                 'value'=>function ($data) {
-                    return Html::a(Html::encode($data->type_name), Url::to(['view', 'id' => $data->id]));
+                    return Html::a(Html::encode($data->status_name), Url::to(['view', 'id' => $data->id]));
                 },
                 'format' => 'raw',
             ],

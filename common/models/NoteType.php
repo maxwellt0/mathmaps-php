@@ -38,7 +38,7 @@ class NoteType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'type_name' => 'Type Name',
+            'type_name' => 'Назва типу',
         ];
     }
 }

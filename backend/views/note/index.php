@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <p>
     <?php
     $btnStyles = ['btn-default','btn-success','btn-primary','btn-danger'];
     foreach ($statusTabs as $value => $tabName) {
@@ -26,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     echo Html::a('<i class="fa fa-plus"></i>' . ' Створити', ['create'], ['class' => 'btn btn-primary pull-right']);
     ?>
+    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
