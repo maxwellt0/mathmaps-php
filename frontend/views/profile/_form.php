@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'birthdate')->widget(DatePicker::className(),
         [
             'clientOptions' => [
-                'dateFormat' => 'yyyy-mm-dd',
+                'dateFormat' => 'yy-mm-dd',
                 'changeMonth' => true,
                 'changeYear' => true,
                 'minDate' => '-110Y',

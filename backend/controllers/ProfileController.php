@@ -6,6 +6,8 @@ use common\models\PermissionHelpers;
 use Yii;
 use frontend\models\Profile;
 use backend\models\search\ProfileSearch;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -47,7 +49,7 @@ class ProfileController extends Controller
                 'actions' => [
                     'delete' => ['post'],
                 ],
-            ],
+            ]
         ];
     }
 

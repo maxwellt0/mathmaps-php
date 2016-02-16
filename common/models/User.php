@@ -28,7 +28,6 @@ use frontend\models\Profile;
  * @property string $auth_key
  * @property integer $role_id
  * @property integer $status_id
- * @property integer $user_type_id
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
@@ -69,8 +68,6 @@ class User extends ActiveRecord implements IdentityInterface
             [['status_id'], 'in', 'range' => array_keys($this->getStatusList())],
             ['role_id', 'default', 'value' => 10],
             [['role_id'], 'in', 'range' => array_keys($this->getRoleList())],
-            ['user_type_id', 'default', 'value' => 10],
-            [['user_type_id'], 'in', 'range' => array_keys($this->getUserTypeList())],
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'required'],
             ['username', 'unique'],
@@ -87,19 +84,25 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             /* Your other attribute labels */
+            'id' => 'ID',
             'email' => 'Email',
-            'roleName' => Yii::t('app', 'Role'),
-            'statusName' => Yii::t('app', 'Status'),
-            'profileId' => Yii::t('app', 'Profile'),
-            'profileLink' => Yii::t('app', 'Profile'),
-            'userLink' => Yii::t('app', 'User'),
-            'username' => Yii::t('app', 'User'),
-            'userTypeName' => Yii::t('app', 'User Type'),
-            'userTypeId' => Yii::t('app', 'User Type'),
+            'roleName' => 'Роль',
+            'statusName' => 'Статус',
+            'profileId' => 'Профайл',
+            'profileLink' => 'Профайл',
+            'userLink' => 'Нікнейм',
+            'username' => 'Нікнейм',
             'userIdLink' => Yii::t('app', 'ID'),
+            'created_at' => 'Зареєстровано',
+            'updated_at' => 'Останній вхід',
+            'notesLink' => 'Записи',
+            'status_value' => 'Статус',
+            'status_id' => 'Статус',
+            'role_value' => 'Роль',
+            'role_id' => 'Роль',
+
         ];
     }
-
 
     /**
      * @findIdentity
@@ -300,44 +303,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     *getUserType
-     *line break to avoid word wrap in PDF
-     * code as single line in your IDE
-     */
-    public function getUserType()
-    {
-        return $this->hasOne(UserType::className(), ['user_type_value' =>
-            'user_type_id']);
-    }
-
-    /**
-     * get user type name
-     *
-     */
-    public function getUserTypeName()
-    {
-        return $this->userType ? $this->userType->user_type_name : '- no user type -';
-    }
-
-    /**
-     * get list of user types for dropdown
-     */
-    public static function getUserTypeList()
-    {
-        $droptions = UserType::find()->asArray()->all();
-        return Arrayhelper::map($droptions, 'user_type_value', 'user_type_name');
-    }
-
-    /**
-     * get user type id
-     *
-     */
-    public function getUserTypeId()
-    {
-        return $this->userType ? $this->userType->id : 'none';
-    }
-
-    /**
      * @getProfileId
      *
      */
@@ -352,9 +317,24 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getProfileLink()
     {
-        $url = Url::to(['profile/view', 'id' => $this->profileId]);
+        if ($this->profile) {
+            $url = Url::to(['profile/view', 'id' => $this->profileId]);
+            $options = [];
+            return Html::a('<i class="fa fa-user"></i>', $url, $options);
+        } else {
+            return '<i class="fa fa-minus"></i>';
+        }
+    }
+
+    /**
+     * @getProfileLink
+     *
+     */
+    public function getNotesLink()
+    {
+        $url = Url::to(['note/index', 'id' => $this->id]);
         $options = [];
-        return Html::a($this->profile ? 'profile' : 'none', $url, $options);
+        return Html::a('<i class="fa fa-th-list"></i>', $url, $options);
     }
 
     /**

@@ -10,16 +10,13 @@ use yii\widgets\ActiveForm;
 <div class="user-form">
     <?php $form = ActiveForm::begin(); ?>
     <?= $form->field($model, 'status_id')->dropDownList($model->statusList,
-        [ 'prompt' => 'Please Choose One' ]);?>
+        [ 'prompt' => '- Виберіть статус -' ]);?>
     <?= $form->field($model, 'role_id')->dropDownList($model->roleList,
-        [ 'prompt' => 'Please Choose One' ]);?>
-    <?= $form->field($model, 'user_type_id')->dropDownList($model->userTypeList,
-        [ 'prompt' => 'Please Choose One' ]);?>
-    <?= $form->field($model, 'username')->textInput(['maxlength' => 255]) ?>
-    <?= $form->field($model, 'email')->textInput(['maxlength' => 255]) ?>
+        [ 'prompt' => '- Виберіть роль -' ]);?>
+    <?= $form->field($model, 'username')->textInput(['maxlength' => 25]) ?>
+    <?= $form->field($model, 'email')->textInput(['maxlength' => 25]) ?>
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update',
-            ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('Зберегти', ['class' => 'btn btn-primary']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

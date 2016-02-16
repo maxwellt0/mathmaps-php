@@ -63,13 +63,17 @@ class NoteStatus extends \yii\db\ActiveRecord
         return Arrayhelper::map($tabs, 'status_value', 'status_name');
     }
 
-    public static function getNotesCountsMap()
+    public static function getNotesCountsMap($userId = false)
     {
-        $counts = NoteStatus::find()
+        $query = NoteStatus::find()
             ->select('status_value, COUNT(status_value) AS cnt')
             ->where(['is not', 'note.id', null])
-            ->joinWith(['notes'])
-            ->groupBy('status_value')
+            ->joinWith(['notes']);
+        if ($userId) {
+            $query->where(['user_note.user_id' => $userId])
+                ->joinWith(['notes.noteUserLinks']);
+        }
+        $counts = $query->groupBy('status_value')
             ->orderBy('status_value')
             ->all();
         $countsMap = Arrayhelper::map($counts, 'status_value', 'cnt');

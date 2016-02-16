@@ -4,7 +4,7 @@ use common\models\ValueHelpers;
 /**
  * @var yii\web\View $this
  */
-$this->title = 'Admin Yii 2 Build';
+$this->title = 'MathMaps Admin';
 $is_admin = ValueHelpers::getRoleValue('Admin');
 ?>
 <div class="site-index">

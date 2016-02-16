@@ -19,8 +19,6 @@ use yii\db\Expression;
  * @property string $name
  * @property string $birthdate
  * @property string $gender_id
- * @property string $created_at
- * @property string $updated_at
  *
  * @property Gender $gender
  */
@@ -35,25 +33,6 @@ class Profile extends \yii\db\ActiveRecord
     }
 
     /**
-     * behaviors to control time stamp, don't forget to use statement for expression
-     *
-     */
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                ],
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
-
-
-    /**
      * @inheritdoc
      */
     public function rules()
@@ -62,7 +41,7 @@ class Profile extends \yii\db\ActiveRecord
             [['user_id', 'gender_id'], 'required'],
             [['user_id', 'gender_id'], 'integer'],
             [['first_name'], 'string'],
-            [['birthdate', 'created_at', 'updated_at'], 'safe'],
+            [['birthdate'], 'safe'],
             [['gender_id'], 'in', 'range' => array_keys($this->getGenderList())],
         ];
     }
@@ -78,12 +57,13 @@ class Profile extends \yii\db\ActiveRecord
             'first_name' => 'Ім\'я',
             'birthdate' => 'Дата народження',
             'gender_id' => 'Стать',
-            'created_at' => 'Зареєстровано',
-            'updated_at' => 'Останній візит',
             'user.eamil' => 'Email',
             'genderName' => Yii::t('app', 'Стать'),
-            'userLink' => Yii::t('app', 'User'),
+            'userLink' => 'Користувач',
             'profileIdLink' => Yii::t('app', 'Profile'),
+            'createdAt' => 'Зареєстровано',
+            'updatedAt' => 'Останній візит',
+            'username' => 'Користувач'
         ];
     }
 
@@ -127,6 +107,16 @@ class Profile extends \yii\db\ActiveRecord
     public function getUsername()
     {
         return $this->user->username;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->user->created_at;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->user->updated_at;
     }
 
     /**

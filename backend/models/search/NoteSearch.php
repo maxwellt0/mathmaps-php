@@ -26,10 +26,16 @@ class NoteSearch extends Note
         ];
     }
 
-    public function search($params, $status)
+    public function search($params, $status = false, $userId = false)
     {
         $query = note::find();
-        if (!is_null($status)) {
+        if ($userId) {
+            $query->where([
+                'user_note.user_id' => $userId,
+                'note.note_status_id' => $status
+            ])->joinWith(['noteUserLinks'])
+                ->joinWith(['noteStatus']);
+        } else {
             $query->where([
                 'note.note_status_id' => $status
             ])->joinWith(['noteStatus']);
@@ -45,8 +51,13 @@ class NoteSearch extends Note
                     'label' => 'Name'
                 ],
                 'noteTypeName' => [
-                    'asc' => ['note_type.note_type_name' => SORT_ASC],
-                    'desc' => ['note_type.note_type_name' => SORT_DESC],
+                    'asc' => ['note_type.type_name' => SORT_ASC],
+                    'desc' => ['note_type.type_name' => SORT_DESC],
+                    'label' => 'Note Type'
+                ],
+                'note_type_id' => [
+                    'asc' => ['note_type.type_name' => SORT_ASC],
+                    'desc' => ['note_type.type_name' => SORT_DESC],
                     'label' => 'Note Type'
                 ],
             ]

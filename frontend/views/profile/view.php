@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'user.email',
             'birthdate',
             'genderName',
-            'created_at',
-            'updated_at',
+            'createdAt',
+            'updatedAt',
         ],
     ]) ?>
 </div>

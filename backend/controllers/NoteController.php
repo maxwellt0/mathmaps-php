@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\NoteStatus;
+use common\models\User;
 use common\models\UserNote;
 use Yii;
 use common\models\note;
@@ -80,6 +81,26 @@ class NoteController extends Controller
 //        ]);
 
         $this->redirect('http://yii2build.com/note/'.$id);
+    }
+
+    public function actionUserList($status = 1, $userId = null)
+    {
+        $searchModel = new NoteSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $status, $userId);
+
+        $statusTabs = NoteStatus::getStatusMap();
+        $tabCounts = NoteStatus::getNotesCountsMap($userId);
+
+        $username = User::findIdentity($userId)->username;
+
+        return $this->render('userList', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'statusTabs' => $statusTabs,
+            'tabCounts' => $tabCounts,
+            'username' => $username,
+            'id' => $userId
+        ]);
     }
 
 //    public function actionViewMap($id)
@@ -166,7 +187,7 @@ class NoteController extends Controller
     {
         $this->findModel($id)->unlinkAndDelete();
         Yii::$app->getSession()->setFlash(
-            'success','Çàïèñ âèäàëåíî'
+            'success','Ğ—Ğ°Ğ¿Ğ¸Ñ Ğ²Ğ¸Ğ´Ğ°Ğ»ĞµĞ½Ğ¾'
         );
 
         return $this->redirect(['index']);
@@ -180,7 +201,7 @@ class NoteController extends Controller
         $model->note_status_id = 1;
         $model->save();
         Yii::$app->getSession()->setFlash(
-            'success','Çàïèñ îïóáë³êîâàíî'
+            'success','Ğ—Ğ°Ğ¿Ğ¸Ñ Ğ¾Ğ¿ÑƒĞ±Ğ»Ñ–ĞºĞ¾Ğ²Ğ°Ğ½Ğ¾'
         );
 
         return $this->redirect(['index']);
@@ -193,7 +214,7 @@ class NoteController extends Controller
         $model->note_status_id = 3;
         $model->save();
         Yii::$app->getSession()->setFlash(
-            'success','Ïóáë³êàö³ş çàïèñó â³äõèëåíî'
+            'success','ĞŸÑƒĞ±Ğ»Ñ–ĞºĞ°Ñ†Ñ–Ñ Ğ·Ğ°Ğ¿Ğ¸ÑÑƒ Ğ²Ñ–Ğ´Ñ…Ğ¸Ğ»ĞµĞ½Ğ¾'
         );
 
         return $this->redirect(['index']);

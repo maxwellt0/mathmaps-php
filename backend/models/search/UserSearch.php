@@ -18,9 +18,6 @@ class UserSearch extends User
      * @var mixed
      */
     public $roleName;
-    public $userTypeName;
-    public $user_type_name;
-    public $user_type_id;
     public $statusName;
     public $profileId;
 
@@ -30,10 +27,9 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'role_id', 'status_id', 'user_type_id'], 'integer'],
+            [['id', 'role_id', 'status_id'], 'integer'],
             [['username', 'email', 'created_at', 'updated_at', 'roleName',
-                'statusName', 'userTypeName', 'profileId',
-                'user_type_name'], 'safe'],
+                'statusName', 'profileId'], 'safe'],
         ];
     }
 
@@ -72,7 +68,7 @@ class UserSearch extends User
                     'desc' => ['user.id' => SORT_DESC],
                     'label' => 'User'
                 ],
-                'userLink' => [
+                'username' => [
                     'asc' => ['user.username' => SORT_ASC],
                     'desc' => ['user.username' => SORT_DESC],
                     'label' => 'User'
@@ -82,25 +78,25 @@ class UserSearch extends User
                     'desc' => ['profile.id' => SORT_DESC],
                     'label' => 'Profile'
                 ],
-                'roleName' => [
+                'role_value' => [
                     'asc' => ['role.role_name' => SORT_ASC],
                     'desc' => ['role.role_name' => SORT_DESC],
                     'label' => 'Role'
                 ],
-                'statusName' => [
+                'status_value' => [
                     'asc' => ['status.status_name' => SORT_ASC],
                     'desc' => ['status.status_name' => SORT_DESC],
                     'label' => 'Status'
                 ],
-                'userTypeName' => [
-                    'asc' => ['user_type.user_type_name' => SORT_ASC],
-                    'desc' => ['user_type.user_type_name' => SORT_DESC],
-                    'label' => 'User Type'
-                ],
                 'created_at' => [
                     'asc' => ['created_at' => SORT_ASC],
                     'desc' => ['created_at' => SORT_DESC],
-                    'label' => 'Created At'
+                    'label' => 'Зареєстровано'
+                ],
+                'updated_at' => [
+                    'asc' => ['updated_at' => SORT_ASC],
+                    'desc' => ['updated_at' => SORT_DESC],
+                    'label' => 'Останній вхід'
                 ],
                 'email' => [
                     'asc' => ['email' => SORT_ASC],
@@ -112,8 +108,7 @@ class UserSearch extends User
         if (!($this->load($params) && $this->validate())) {
             $query->joinWith(['role'])
                 ->joinWith(['status'])
-                ->joinWith(['profile'])
-                ->joinWith(['userType']);
+                ->joinWith(['profile']);
             return $dataProvider;
         }
         $this->addSearchParameter($query, 'user.id');
@@ -121,7 +116,6 @@ class UserSearch extends User
         $this->addSearchParameter($query, 'email', true);
         $this->addSearchParameter($query, 'role_id');
         $this->addSearchParameter($query, 'status_id');
-        $this->addSearchParameter($query, 'user_type_id');
         $this->addSearchParameter($query, 'created_at');
         $this->addSearchParameter($query, 'updated_at');
 // filter by role
@@ -131,10 +125,6 @@ class UserSearch extends User
 // filter by status
             ->joinWith(['status' => function ($q) {
                 $q->where('status.status_name LIKE "%' . $this->statusName . '%"');
-            }])
-// filter by user type
-            ->joinWith(['userType' => function ($q) {
-                $q->where('user_type.user_type_name LIKE "%' . $this->userTypeName . '%"');
             }]);
         return $dataProvider;
     }

@@ -4,22 +4,22 @@ use yii\widgets\DetailView;
 use common\models\PermissionHelpers;
 /* @var $this yii\web\View */
 /* @var $model common\models\user */
-$this->title = $model->username;
+$this->title = 'Сторінка користувача ' . $model->username;
 $show_this_nav = PermissionHelpers::requireMinimumRole('SuperUser');
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Користувачі', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-view">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= $model->username ?></h1>
     <p>
         <?php if (!Yii::$app->user->isGuest && $show_this_nav) {
-            echo Html::a('Update', ['update', 'id' => $model->id],
+            echo Html::a('<i class="fa fa-pencil"></i>' . ' Редагувати', ['update', 'id' => $model->id],
                 ['class' => 'btn btn-primary']);}?>
         <?php if (!Yii::$app->user->isGuest && $show_this_nav) {
-            echo Html::a('Delete', ['delete', 'id' => $model->id], [
+            echo Html::a('<i class="fa fa-times"></i>' . ' Видалити', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
                 'data' => [
-                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                    'confirm' => Yii::t('app', 'Ви підтверджуєте видалення?'),
                     'method' => 'post',
                 ],
             ]);}?>
@@ -27,18 +27,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            'id',
             ['attribute'=>'profileLink', 'format'=>'raw'],
-//'username',
-//'auth_key',
-//'password_hash',
-//'password_reset_token',
+            ['attribute'=>'notesLink', 'format'=>'raw'],
             'email:email',
             'roleName',
             'statusName',
 // lazyload 'status.status_name',
             'created_at',
             'updated_at',
-            'id',
         ],
     ]) ?>
 </div>

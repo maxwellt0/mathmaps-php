@@ -8,6 +8,7 @@ use frontend\models\Profile;
 
 class ProfileSearch extends Profile
 {
+    public $username;
     public $genderName;
     public $gender_id;
     public $userId;
@@ -16,7 +17,7 @@ class ProfileSearch extends Profile
     {
         return [
             [['id', 'gender_id'], 'integer'],
-            [['first_name', 'last_name', 'birthdate', 'genderName', 'userId'], 'safe'],
+            [['username','first_name', 'birthdate', 'genderName', 'userId'], 'safe'],
         ];
     }
 
@@ -26,7 +27,8 @@ class ProfileSearch extends Profile
     public function attributeLabels()
     {
         return [
-            'gender_id' => 'Gender',
+            'gender_id' => 'Стать',
+            'username' => 'Користувач'
         ];
     }
 
@@ -40,9 +42,13 @@ class ProfileSearch extends Profile
             'attributes' => [
                 'id',
                 'first_name',
-                'last_name',
+                'username' => [
+                    'asc' => ['username' => SORT_ASC],
+                    'desc' => ['username' => SORT_DESC],
+                    'label' => 'User'
+                ],
                 'birthdate',
-                'genderName' => [
+                'gender_id' => [
                     'asc' => ['gender.gender_name' => SORT_ASC],
                     'desc' => ['gender.gender_name' => SORT_DESC],
                     'label' => 'Gender'
@@ -52,11 +58,7 @@ class ProfileSearch extends Profile
                     'desc' => ['Profile.id' => SORT_DESC],
                     'label' => 'ID'
                 ],
-                'userLink' => [
-                    'asc' => ['user.username' => SORT_ASC],
-                    'desc' => ['user.username' => SORT_DESC],
-                    'label' => 'User'
-                ],
+
             ]
         ]);
         if (!($this->load($params) && $this->validate())) {
@@ -66,11 +68,8 @@ class ProfileSearch extends Profile
         }
         $this->addSearchParameter($query, 'profile.id');
         $this->addSearchParameter($query, 'first_name', true);
-        $this->addSearchParameter($query, 'last_name', true);
-        $this->addSearchParameter($query, 'birthdate');
+        $this->addSearchParameter($query, 'birthdate', true);
         $this->addSearchParameter($query, 'gender_id');
-        $this->addSearchParameter($query, 'created_at');
-        $this->addSearchParameter($query, 'updated_at');
         $this->addSearchParameter($query, 'user_id');
         // filter by gender name
         $query->joinWith(['gender' => function ($q) {

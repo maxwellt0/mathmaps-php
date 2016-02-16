@@ -13,7 +13,6 @@ use yii\helpers\ArrayHelper;
  * @property integer $note_status_id
  * @property resource $text
  * @property integer $note_type_id
- *
  * @property Note[] $higherNotes
  * @property Note[] $lowerNotes
  * @property NoteType $noteType
@@ -36,6 +35,7 @@ class Note extends \yii\db\ActiveRecord
         return [
             [['name', 'text'], 'required'],
             [['note_status_id', 'note_type_id'], 'integer'],
+            ['note_status_id', 'default', 'value' => 0],
             [['text'], 'string'],
             [['name'], 'string', 'max' => 45]
         ];
@@ -74,7 +74,7 @@ class Note extends \yii\db\ActiveRecord
 
     public function getNoteStatus()
     {
-        return $this->hasOne(NoteStatus::className(), ['id' => 'note_status_id']);
+        return $this->hasOne(NoteStatus::className(), ['status_value' => 'note_status_id']);
     }
 
     public function getNoteStatusName()
