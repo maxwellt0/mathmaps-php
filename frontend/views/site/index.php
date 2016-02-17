@@ -11,7 +11,19 @@ $this->title = 'MathMaps';
 ?>
 
 <div class="site-index">
-
+    <div class="jumbotron">
+        <h1>Вітаємо на MathMaps <i class="fa fa-globe"></i>!</h1>
+        <p class="lead">
+            Відкрий для себе світ математики із картами MathMaps.
+        </p>
+        <?php
+        echo Html::a(
+            'Перейти до записів',
+            ['note/index'],
+            ['class' => 'btn btn-lg btn-success']
+        );
+        ?>
+    </div>
     <div class="row">
         <div class="col-md-8">
             <h1>Дивись на речі широко</h1>

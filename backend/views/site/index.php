@@ -9,7 +9,7 @@ $is_admin = ValueHelpers::getRoleValue('Admin');
 ?>
 <div class="site-index">
     <div class="jumbotron">
-        <h1>Вітаємо на Адмін!</h1>
+        <h1>Вітаємо на MathMaps <i class="fa fa-globe"></i> Адмін!</h1>
         <p class="lead">
             Тепер Ви можете керувати користувачами,
             ролями та хоч цілим світом з цією адмінкою.

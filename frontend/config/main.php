@@ -47,6 +47,12 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'dateFormat' => 'yyyy-MM-dd',
+            'datetimeFormat' => 'yyyy-MM-dd php:H:i:s',
+            'timeFormat' => 'php:H:i:s',
+        ]
     ],
     'params' => $params,
 ];
