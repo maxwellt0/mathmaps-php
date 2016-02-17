@@ -9,125 +9,135 @@ $is_admin = ValueHelpers::getRoleValue('Admin');
 ?>
 <div class="site-index">
     <div class="jumbotron">
-        <h1>Welcome to Admin!</h1>
+        <h1>Вітаємо на Адмін!</h1>
         <p class="lead">
-            Now you can manage users, roles, and more with
-            our easy tools.
+            Тепер Ви можете керувати користувачами,
+            ролями та хоч цілим світом з цією адмінкою.
         </p>
         <p>
             <?php
             if (!Yii::$app->user->isGuest
-                &&
-                Yii::$app->user->identity->role_id >=
-                $is_admin) {
-                echo Html::a('Manage Users', ['user/index'],
-                    ['class' => 'btn btn-lg btn-success']);
-}
-            ?>
+                        && Yii::$app->user->identity->role_id >= $is_admin) {
+                    echo Html::a(
+                        'Керувати користувачами',
+                        ['user/index'],
+                        ['class' => 'btn btn-lg btn-success']
+                    );
+            } ?>
         </p>
     </div>
     <div class="body-content">
         <div class="row">
             <div class="col-lg-4">
-                <h2>Users</h2>
+                <h2>Записи</h2>
                 <p>
-                    This is the place to manage users. You can edit status and roles from here.
-                    The UI is easy to use and intuitive, just click the link below to get started.
+                    Це місце для управління записами.
+                    Ви можете редагувати записи звідси.
+                    Простий та інтуїтивний UI,
+                    тільки клікніть на посилання знизу щоб почати.
                 </p>
                 <p>
                     <?php
                     if (!Yii::$app->user->isGuest
                         && Yii::$app->user->identity->role_id >= $is_admin) {
-                        echo Html::a('Manage Users', ['user/index'],
+                        echo Html::a('Керувати записами', ['note/index'],
                             ['class' => 'btn btn-default']);
                     }
                     ?>
                 </p>
             </div>
             <div class="col-lg-4">
-                <h2>Roles</h2>
+                <h2>Типи записів</h2>
                 <p>
-                    This is where you manage Roles. You can decide who is admin and w\
-                    ho is not. You can
-                    add a new role if you like, just click the link below to get started.
+                    Звідси можна керувати типами записів.
+                    Ви можете редагувати або видаляти,
+                    а також можете створювати типи,
+                    просто клікніть на посилання знизу щоб почати.
                 </p>
                 <p>
                     <?php
                     if (!Yii::$app->user->isGuest
                         && Yii::$app->user->identity->role_id >= $is_admin) {
-                        echo Html::a('Manage Roles', ['role/index'],
+                        echo Html::a('Керувати типами', ['note-type/index'],
                             ['class' => 'btn btn-default']);
                     }
                     ?>
                 </p>
             </div>
             <div class="col-lg-4">
-                <h2>Profiles</h2>
+                <h2>Світ</h2>
                 <p>
-                    Need to review Profiles? This is the place to get it done.
-                    These are easy to manage via UI. Just click the link below to manage profiles.
+                    Хочете керувати світом?
+                    Це місце саме для цього.
+                    Простий інтуітивний інтерфейс робить це можливим.
+                    Просто клікніть на посилання знизу щоб почати.
                 </p>
                 <p>
                     <?php
-if (!Yii::$app->user->isGuest
-    && Yii::$app->user->identity->role_id >= $is_admin) {
-    echo Html::a('Manage Profiles', ['profile/index'],
-        ['class' => 'btn btn-default']);
-}
-?>
+                    if (!Yii::$app->user->isGuest
+                        && Yii::$app->user->identity->role_id >= $is_admin) {
+                        echo Html::a('Керувати світом (в розробці)', ['profile/index'],
+                            ['class' => 'btn btn-danger disabled']);
+                    }
+                    ?>
                 </p>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-4">
-                <h2>User Types</h2>
+                <h2>Користувачі</h2>
                 <p>
-                    This is the place to manage user types. You can edit user
-                    types from here. The UI is easy to use and intuitive, just
-                    click the link below to get started.
+                    Це місце для керування користувачами.
+                    Ви можете змінювати статуси та ролі користувачів звідси.
+                    Інтерфейс інтуітивно простий в користуванні,
+                    просто клікніть на посилання знизу щоб почати.
                 </p>
                 <p>
                     <?php
                     if (!Yii::$app->user->isGuest
                         && Yii::$app->user->identity->role_id >= $is_admin) {
-                        echo Html::a('Manage User Types', ['user-type/index'],
+                        echo Html::a('Керувати користувачами', ['user/index'],
                             ['class' => 'btn btn-default']);
                     }
                     ?>
                 </p>
             </div>
             <div class="col-lg-4">
-                <h2>Statuses</h2>
+                <h2>Ролі</h2>
                 <p>
-                    This is where you manage Statuses. You can add or delete.
-                    You can add a new status if you like, just click the link
-                    below to get started.
+                    Це місце для керування ролями.
+                    Ви можете вирішувати хто є адмін і хто не адмін.
+                    Ви можете додати нові ролі, якщо захочеться, просто клікніть
+                    на посилання знизу щоб почати.
                 </p>
                 <p>
                     <?php
                     if (!Yii::$app->user->isGuest
                         && Yii::$app->user->identity->role_id >= $is_admin) {
-                        echo Html::a('Manage Statuses', ['status/index'],
+                        echo Html::a('Керувати ролями', ['role/index'],
                             ['class' => 'btn btn-default']);
                     }
                     ?>
                 </p>
             </div>
             <div class="col-lg-4">
-                <h2>Placeholder</h2>
+                <h2>Профайли</h2>
                 <p>
-                    Need to review Profiles? This is the place to get it done.
-                    These are easy to manage via UI. Just click the link below
-                    to manage profiles.
+                    Потрібно переглянути профайли?
+                    Все потрібне можна знайти тут.
+                    Ними легко керувати через цей UI.
+                    Просто клікніть на посилання знизу щоб керувати профайлами.
                 </p>
                 <p>
                     <?php
                     if (!Yii::$app->user->isGuest
-                        && Yii::$app->user->identity->role_id >= $is_admin) {
-                        echo Html::a('Manage Profiles', ['profile/index'],
-                            ['class' => 'btn btn-default']);
-                    }
-                    ?>
+                            && Yii::$app->user->identity->role_id >= $is_admin) {
+                        echo Html::a(
+                            'Керувати профайлами',
+                            ['profile/index'],
+                            ['class' => 'btn btn-default']
+                        );
+                    } ?>
                 </p>
             </div>
         </div>
