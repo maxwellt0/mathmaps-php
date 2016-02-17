@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\status */
 
-$this->title = 'Create Status';
-$this->params['breadcrumbs'][] = ['label' => 'Statuses', 'url' => ['index']];
+$this->title = 'Створити статус';
+$this->params['breadcrumbs'][] = ['label' => 'Статуси користувачів', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="status-create">

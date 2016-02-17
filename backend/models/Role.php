@@ -41,8 +41,8 @@ class Role extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'role_name' => 'Role Name',
-            'role_value' => 'Role Value',
+            'role_name' => 'Назва ролі',
+            'role_value' => 'Значення',
         ];
     }
 

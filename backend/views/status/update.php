@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\status */
 
-$this->title = 'Update Status: ' . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Statuses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Редагувати статус: ' . ' ' . $model->status_name;
+$this->params['breadcrumbs'][] = ['label' => 'Статуси', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->status_name, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Редагувати';
 ?>
 <div class="status-update">
 

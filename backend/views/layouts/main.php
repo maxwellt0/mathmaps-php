@@ -57,7 +57,6 @@ if (!Yii::$app->user->isGuest) {
         $userDdown[] = ['label' => 'Користувачі', 'url' => ['user/index']];
         $userDdown[] = ['label' => 'Профайли', 'url' => ['profile/index']];
         $userDdown[] =  ['label' => 'Ролі', 'url' => ['/role/index']];
-        $userDdown[] = ['label' => 'Типи', 'url' => ['/user-type/index']];
         $userDdown[] = ['label' => 'Статуси', 'url' => ['/status/index']];
 
         $noteDdown = [];
