@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use frontend\widgets\dracula\Graph;
+use frontend\widgets\cytoscape\Graph;
 
 /* @var $this yii\web\View */
 /* @var $noteModel common\models\note */
@@ -23,5 +23,5 @@ $this->params['breadcrumbs'][] = 'Карта';
 </div>
 <script type="text/javascript">
     var viewWidth = document.getElementById("note-map").clientWidth;
-    var viewHeight = document.body.clientHeight*0.5;
+    var viewHeight = document.body.clientHeight*0.8;
 </script>

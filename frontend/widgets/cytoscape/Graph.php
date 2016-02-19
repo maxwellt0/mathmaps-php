@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Maxwellt
- * Date: 29.09.2015
- * Time: 4:25
- */
 
-namespace frontend\widgets\dracula;
+namespace frontend\widgets\cytoscape;
 
 use Yii;
 use yii\base\Widget;

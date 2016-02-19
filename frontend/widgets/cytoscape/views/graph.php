@@ -2,8 +2,7 @@
 /* @var $nodes */
 /* @var $links */
 ?>
-<div id="canvas"></div>
-<!--<button id="redraw" onclick="redraw();">redraw</button>-->
+<div id="cy"></div>
 <script>
     <?php
         $js_nodes = json_encode($nodes);

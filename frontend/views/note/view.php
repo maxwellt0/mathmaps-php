@@ -4,7 +4,7 @@ use yii\bootstrap\ButtonDropdown;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
-use frontend\widgets\dracula\Graph;
+use frontend\widgets\cytoscape\Graph;
 
 /* @var $this yii\web\View */
 /* @var $noteModel common\models\note */
