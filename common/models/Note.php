@@ -127,6 +127,25 @@ class Note extends \yii\db\ActiveRecord
         return ArrayHelper::map($lowerNotes, 'id', 'name');
     }
 
+    public function getNodesData($full = false)
+    {
+        $query = $this->find()
+            ->select('note.id, note.name')
+            ->innerJoinWith(['higherNotes'=> function ($q) {
+                $q->from('note ln');
+            }]);
+        if ($full) {
+            $query->joinWith(['lowerNotes']);
+        }
+        $notes = $query->all();
+        $nodesData = [];
+        foreach ($this->higherNotes as $note){ // fix it
+            $nodesData[] = [ 'data' => [ 'id' => $note->id, 'name' => $note->name]];
+        }
+        $nodesData[] = [ 'data' => [ 'id' => $this->id, 'name' => $this->name]];
+        return $nodesData;
+    }
+
     public function getHigherNotesList()
     {
         $higherNotes = $this -> higherNotes;

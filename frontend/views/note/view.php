@@ -8,8 +8,8 @@ use frontend\widgets\cytoscape\Graph;
 
 /* @var $this yii\web\View */
 /* @var $noteModel common\models\note */
-/* @var $nodesModel */
-/* @var $linksModel */
+/* @var $notesData */
+/* @var $linksData */
 /* @var $userNote */
 /* @var boolean $userIsOwner */
 
@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="note-view" id="note-view">
 
     <?= Graph::widget([
-            'nodes' => $nodesModel,
-            'links' => $linksModel,
+            'nodes' => $notesData,
+            'links' => $linksData,
     ]); ?>
 
     <div class="note-view-buttons">

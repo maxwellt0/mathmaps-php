@@ -9,6 +9,7 @@ use Yii;
 use common\models\Note;
 use frontend\models\search\NoteSearch;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -79,20 +80,17 @@ class NoteController extends Controller
     {
         $mainNote = $this->findModel($id);
 
-        $lowerNotes = $mainNote->lowerNotes;
-        $mainNoteName = $mainNote->name;
-        $mainNoteId = $mainNote->id;
+        $notesData = $mainNote->getNodesData();
 
-        $node = [$mainNoteId, $mainNoteName];
-        $nodesModel = [$node];
-        $linksModel = [];
-
-        foreach ($lowerNotes as $note) {
-            $node = [$note->id, $note->name];
-            $nodesModel[] = $node;
-
-            $link = [$note->id, $mainNoteId];
-            $linksModel[] = $link;
+        $linksData = [];
+        $i = 1;
+        foreach ($mainNote->higherNotesList as $id => $name) {
+            $linksData[] = ['data'=> [
+                'id' => $id . $mainNote->id,
+                'source' => $id . "",
+                'target' => $mainNote->id,
+                'weight' => $i
+            ]];
         }
 
         $userNote = $this->findUserNote($id);
@@ -102,8 +100,8 @@ class NoteController extends Controller
 
         return $this->render('view', [
             'noteModel' => $mainNote,
-            'nodesModel' => $nodesModel,
-            'linksModel' => $linksModel,
+            'notesData' => $notesData,
+            'linksData' => $linksData,
             'userNote' => $userNote,
             'userIsOwner' => $userIsOwner,
             'publStatus' => $publStatus
