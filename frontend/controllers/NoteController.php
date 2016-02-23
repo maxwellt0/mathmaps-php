@@ -83,13 +83,13 @@ class NoteController extends Controller
         $notesData = $mainNote->getNodesData();
 
         $linksData = [];
-        $i = 1;
+//        $i = 1;
         foreach ($mainNote->higherNotesList as $id => $name) {
             $linksData[] = ['data'=> [
                 'id' => $id . $mainNote->id,
                 'source' => $id . "",
                 'target' => $mainNote->id,
-                'weight' => $i
+//                'weight' => $i
             ]];
         }
 
@@ -112,34 +112,32 @@ class NoteController extends Controller
     {
         $mainNote = $this->findModel($id);
 
-        $lowerNotes = $mainNote->lowerNotes;
-        $higherNotes = $mainNote->higherNotes;
-        $mainNoteName = $mainNote->name;
-        $mainNoteId = $mainNote->id;
+        $notesData = $mainNote->getNodesData(true);
 
-        $node = [$mainNoteId, $mainNoteName];
-        $nodesModel = [$node];
-        $linksModel = [];
-
-        foreach ($lowerNotes as $note) {
-            $node = [$note->id, $note->name];
-            $nodesModel[] = $node;
-
-            $link = [$note->id, $mainNoteId];
-            $linksModel[] = $link;
+        $linksData = [];
+//        $i = 1;
+        foreach ($mainNote->higherNotesList as $id => $name) {
+            $linksData[] = ['data'=> [
+                'id' => $id . $mainNote->id,
+                'source' => $id . "",
+                'target' => $mainNote->id,
+//                'weight' => $i
+            ]];
         }
-        foreach ($higherNotes as $note) {
-            $node = [$note->id, $note->name];
-            $nodesModel[] = $node;
-
-            $link = [$mainNoteId, $note->id];
-            $linksModel[] = $link;
+//        $i++;
+        foreach ($mainNote->lowerNotesList as $id => $name) {
+            $linksData[] = ['data'=> [
+                'id' => $id . $mainNote->id,
+                'target' => $id . "",
+                'source' => $mainNote->id,
+//                'weight' => $i
+            ]];
         }
 
         return $this->render('map', [
             'noteModel' => $mainNote,
-            'nodesModel' => $nodesModel,
-            'linksModel' => $linksModel,
+            'notesData' => $notesData,
+            'linksData' => $linksData,
         ]);
     }
 

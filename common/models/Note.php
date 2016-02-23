@@ -101,8 +101,9 @@ class Note extends \yii\db\ActiveRecord
         return $this->hasMany(
             Note::className(),
             ['id' => 'note_id']
-        )->viaTable(
-            'note_note',
+        )->from('note hn')
+            ->viaTable(
+            'note_note higher_nn',
             ['used_note_id' => 'id']
         );
     }
@@ -115,8 +116,9 @@ class Note extends \yii\db\ActiveRecord
         return $this->hasMany(
             Note::className(),
             ['id' => 'used_note_id']
-        )->viaTable(
-            'note_note',
+        )->from('note ln')
+            ->viaTable(
+            'note_note lower_nn',
             ['note_id' => 'id']
         );
     }
@@ -129,20 +131,32 @@ class Note extends \yii\db\ActiveRecord
 
     public function getNodesData($full = false)
     {
-        $query = $this->find()
-            ->select('note.id, note.name')
-            ->innerJoinWith(['higherNotes'=> function ($q) {
-                $q->from('note ln');
-            }]);
-        if ($full) {
-            $query->joinWith(['lowerNotes']);
-        }
-        $notes = $query->all();
+//        $query = $this->find()
+//            ->select('note.id, note.name')
+//            ->innerJoinWith(['higherNotes']);
+//        if ($full) {
+//            $query->innerJoinWith(['lowerNotes']);
+//        }
+//        $notes = $query->all();
         $nodesData = [];
-        foreach ($this->higherNotes as $note){ // fix it
-            $nodesData[] = [ 'data' => [ 'id' => $note->id, 'name' => $note->name]];
+        $notes = $this->higherNotes;
+        if ($full) {
+            $notes = ArrayHelper::merge($this->lowerNotes, $this->higherNotes);
         }
-        $nodesData[] = [ 'data' => [ 'id' => $this->id, 'name' => $this->name]];
+        foreach ($notes as $note){ // fix it
+            $nodesData[] = [ 'data' => [
+                'id' => $note->id,
+                'name' => $note->name,
+                'color' => Note::randomColor(),
+                'href' => Note::getHref($note->id)
+            ]];
+        }
+        $nodesData[] = [ 'data' => [
+            'id' => $this->id,
+            'name' => $this->name,
+            'color' => Note::randomColor(),
+            'href' => Note::getHref($this->id)
+        ]];
         return $nodesData;
     }
 
@@ -214,8 +228,6 @@ class Note extends \yii\db\ActiveRecord
         );
     }
 
-    /* it can be done by function 'link()' ?
-     http://stackoverflow.com/questions/26763298/how-do-i-work-with-many-to-many-relations-in-yii2 */
     public function linkNoteToUser($userId)
     {
         $statusId = UsingStatus::getIdByValue(0);
@@ -239,6 +251,53 @@ class Note extends \yii\db\ActiveRecord
         $this->unlinkAll('higherNotes', $this->higherNotes);
         $this->save();
         $this->delete();
+    }
+
+    public static function hsvToRgb($h, $s, $v)
+    {
+        $c = $v*$s;
+        $ht = $h/60.0;
+        $x  = $c*(1 - abs(($ht % 2) -1));
+        $rgb1 = [];
+        if ($ht>=0 && $ht<1) {
+            $rgb1 = [$c, $x, 0];
+        }  elseif ($ht>=1 && $ht<2) {
+            $rgb1 = [$x, $c, 0];
+        } elseif ($ht>=2 && $ht<3) {
+            $rgb1 = [0, $c, $x];
+        } elseif ($ht>=3 && $ht<4) {
+            $rgb1 = [0, $x, $c];
+        } elseif ($ht>=4 && $ht<5) {
+            $rgb1 = [$x, 0, $c];
+        } elseif ($ht>=5 && $ht<6) {
+            $rgb1 = [$c, 0, $x];
+        } else {
+            $rgb1 = [0, 0, 0];
+        }
+        $m = $v - $c;
+        $rgb = [
+            floor((($rgb1[0] + $m) * 256) + 1),
+            floor((($rgb1[1] + $m) * 256) + 1),
+            floor((($rgb1[2] + $m) * 256) + 1)
+        ];
+        return '#'
+        . dechex($rgb[0])
+        . dechex($rgb[1])
+        . dechex($rgb[2]);
+    }
+
+    public static function randomColor()
+    {
+        $golden_ratio_conjugate = 0.618033988749895;
+        $h = rand(0,256);
+        $h += $golden_ratio_conjugate;
+        $h += $h % 1;
+        return Note::hsvToRgb($h, 0.6, 0.95);
+    }
+
+    public static function getHref($id)
+    {
+        return "/note/" . $id;
     }
 
 }
