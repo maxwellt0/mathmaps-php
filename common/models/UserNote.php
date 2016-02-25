@@ -80,6 +80,15 @@ class UserNote extends \yii\db\ActiveRecord
         return $countsMap;
     }
 
+//    public static function getUserNotesIds($userId)
+//    {
+//        $ids = UserNote::find()
+//            ->select('note_id')
+//            ->where(['user_id' => $userId])
+//            ->all();
+//        return ArrayHelper::toArray($ids, 'note_id');
+//    }
+
     public static function deleteUserNote($noteId, $userId)
     {
         $userNote = UserNote::findOne([

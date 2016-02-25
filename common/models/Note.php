@@ -100,11 +100,11 @@ class Note extends \yii\db\ActiveRecord
     {
         return $this->hasMany(
             Note::className(),
-            ['id' => 'note_id']
+            ['id' => 'used_note_id']
         )->from('note hn')
             ->viaTable(
-            'note_note higher_nn',
-            ['used_note_id' => 'id']
+            'note_note',
+            ['note_id' => 'id']
         );
     }
 
@@ -115,11 +115,11 @@ class Note extends \yii\db\ActiveRecord
     {
         return $this->hasMany(
             Note::className(),
-            ['id' => 'used_note_id']
+            ['id' => 'note_id']
         )->from('note ln')
             ->viaTable(
-            'note_note lower_nn',
-            ['note_id' => 'id']
+            'note_note',
+            ['used_note_id' => 'id']
         );
     }
 
@@ -127,37 +127,6 @@ class Note extends \yii\db\ActiveRecord
     {
         $lowerNotes = $this -> lowerNotes;
         return ArrayHelper::map($lowerNotes, 'id', 'name');
-    }
-
-    public function getNodesData($full = false)
-    {
-//        $query = $this->find()
-//            ->select('note.id, note.name')
-//            ->innerJoinWith(['higherNotes']);
-//        if ($full) {
-//            $query->innerJoinWith(['lowerNotes']);
-//        }
-//        $notes = $query->all();
-        $nodesData = [];
-        $notes = $this->higherNotes;
-        if ($full) {
-            $notes = ArrayHelper::merge($this->lowerNotes, $this->higherNotes);
-        }
-        foreach ($notes as $note){ // fix it
-            $nodesData[] = [ 'data' => [
-                'id' => $note->id,
-                'name' => $note->name,
-                'color' => Note::randomColor(),
-                'href' => Note::getHref($note->id)
-            ]];
-        }
-        $nodesData[] = [ 'data' => [
-            'id' => $this->id,
-            'name' => $this->name,
-            'color' => Note::randomColor(),
-            'href' => Note::getHref($this->id)
-        ]];
-        return $nodesData;
     }
 
     public function getHigherNotesList()
@@ -183,6 +152,85 @@ class Note extends \yii\db\ActiveRecord
             ->where(['not in','id', $ids])
             ->all();
         return ArrayHelper::map($otherNotes, 'id', 'name');
+    }
+
+    public function getLowerNotesData()
+    {
+        $conditions = [
+            'note.id' => $this->id,
+            'note.note_status_id' => 1
+        ];
+        if (!Yii::$app->user->isGuest) {
+            $userId = Yii::$app->user->identity->id;
+            $conditions = [
+                'and',
+                [
+                    'note.id' => $this->id
+                ],
+                [
+                    'or',
+                    'note.note_status_id' => 1,
+                    'user_note.user_id' => $userId
+                ]
+            ];
+        }
+        $ids = $this->find()
+            ->select(['ln.id', 'ln.name'])
+            ->innerJoinWith(['lowerNotes'])
+            ->where($conditions)->all();
+        return ArrayHelper::toArray($ids, 'id');
+    }
+
+    public function getHigherNotesData()
+    {
+        $conditions = [
+            'note.id' => $this->id,
+            'note.note_status_id' => 1
+        ];
+        if (!Yii::$app->user->isGuest) {
+            $userId = Yii::$app->user->identity->id;
+            $conditions = [
+                'and',
+                [
+                    'note.id' => $this->id
+                ],
+                [
+                    'or',
+                    'note.note_status_id' => 1,
+                    'user_note.user_id' => $userId
+                ]
+            ];
+        }
+        $ids = $this->find()
+            ->select(['hn.id', 'hn.name'])
+            ->joinWith(['higherNotes'])
+            ->joinWith(['noteUserLinks'])
+            ->where($conditions)->all();
+        return ArrayHelper::toArray($ids, 'id');
+    }
+
+    public function getNodesData($full = false)
+    {
+        $notes = $this->higherNotesData;
+        if ($full) {
+            $notes = ArrayHelper::merge($this->lowerNotesData, $notes);
+        }
+        $nodesData = [];
+        foreach ($notes as $note){
+            $nodesData[] = [ 'data' => [
+                'id' => $note['id'],
+                'name' => $note['name'],
+                'color' => Note::randomColor(),
+                'href' => Note::getHref($note['id'])
+            ]];
+        }
+        $nodesData[] = [ 'data' => [
+            'id' => $this->id,
+            'name' => $this->name,
+            'color' => Note::randomColor(),
+            'href' => Note::getHref($this->id)
+        ]];
+        return $nodesData;
     }
 
     public function linkLowerNotes($ids)

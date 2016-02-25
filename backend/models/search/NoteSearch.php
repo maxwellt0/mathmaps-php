@@ -38,13 +38,18 @@ class NoteSearch extends Note
         } else {
             $query->where([
                 'note.note_status_id' => $status
-            ])->joinWith(['noteStatus']);
+            ]);
         }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
         $dataProvider->setSort([
             'attributes' => [
+                'id' => [
+                    'asc' => ['note.id' => SORT_ASC],
+                    'desc' => ['note.id' => SORT_DESC],
+                    'label' => 'ID'
+                ],
                 'name' => [
                     'asc' => ['note.name' => SORT_ASC],
                     'desc' => ['note.name' => SORT_DESC],

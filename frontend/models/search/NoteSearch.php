@@ -54,6 +54,10 @@ class NoteSearch extends Note
                     'user_note.user_id' => $id,
                     'user_note.using_status_id' => $statusId
                 ])->joinWith(['noteUserLinks']);
+        } else {
+            $query->where([
+                'note.note_status_id' => 1
+            ]);
         }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
