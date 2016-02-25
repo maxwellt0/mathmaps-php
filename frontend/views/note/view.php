@@ -27,7 +27,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="note-view-buttons">
         <?php if (!Yii::$app->user->isGuest) {
             if (!$userNote) {
-                echo Html::a('Вивчити', ['add-to-list', 'id' => $noteModel->id], ['class' => 'btn btn-primary']);
+                echo Html::a('Вивчити', ['add-to-list', 'id' => $noteModel->id], [
+                    'class' => 'btn btn-primary',
+                    'data' => [
+                        'method' => 'post',
+                    ],
+                ]);
             } else {
                 $buttons = ['btn-default', 'btn-info', 'btn-success', 'btn-warning', 'btn-danger',];
                 $droptions = [];
@@ -44,7 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => $userNote->usingStatus->status_name,
                     'dropdown' => [ 'items' =>$droptions ],
                     'options' => [
-                        'class' => 'btn status-button ' . $buttons[$userNote->usingStatus->status_value]
+                        'class' => 'btn status-button ' . $buttons[$userNote->usingStatus->status_value],
+                        'data' => [
+                            'method' => 'post',
+                        ],
                     ]
                 ]);
             }
@@ -69,7 +77,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 $btnStyle = "btn-succes disabled";
                 $btnDisabled = true;
             }
-            echo Html::a('<i class="fa fa-hand-o-up"></i>' . ' Опублікувати', ['offer', 'id' => $noteModel->id], ['class' => 'btn ' . $btnStyle, 'disabled' => $btnDisabled]);
+            echo Html::a('<i class="fa fa-hand-o-up"></i>' . ' Опублікувати', ['offer', 'id' => $noteModel->id], [
+                    'class' => 'btn ' . $btnStyle,
+                    'disabled' => $btnDisabled,
+                    'data' => [
+                        'method' => 'post',
+                    ],
+                ]);
         } ?>
 
         <?= Html::a('<i class="fa fa-expand"></i>' . ' Вся карта', ['view-map', 'id' => $noteModel->id], ['class' => 'btn btn-primary pull-right']) ?>

@@ -33,7 +33,7 @@ class Note extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'text'], 'required'],
+            [['name', 'text', 'note_type_id'], 'required'],
             [['note_status_id', 'note_type_id'], 'integer'],
             ['note_status_id', 'default', 'value' => 0],
             [['text'], 'string'],
@@ -169,16 +169,17 @@ class Note extends \yii\db\ActiveRecord
                 ],
                 [
                     'or',
-                    'note.note_status_id' => 1,
+                    'note.note_status_id=1',
                     'user_note.user_id' => $userId
                 ]
             ];
         }
         $ids = $this->find()
             ->select(['ln.id', 'ln.name'])
-            ->innerJoinWith(['lowerNotes'])
+            ->JoinWith(['lowerNotes'])
+            ->joinWith(['noteUserLinks'])
             ->where($conditions)->all();
-        return ArrayHelper::toArray($ids, 'id');
+        return ArrayHelper::toArray($ids, 'id', 'name');
     }
 
     public function getHigherNotesData()
@@ -196,7 +197,7 @@ class Note extends \yii\db\ActiveRecord
                 ],
                 [
                     'or',
-                    'note.note_status_id' => 1,
+                    'note.note_status_id=1',
                     'user_note.user_id' => $userId
                 ]
             ];
@@ -206,7 +207,7 @@ class Note extends \yii\db\ActiveRecord
             ->joinWith(['higherNotes'])
             ->joinWith(['noteUserLinks'])
             ->where($conditions)->all();
-        return ArrayHelper::toArray($ids, 'id');
+        return ArrayHelper::toArray($ids, 'id', 'name');
     }
 
     public function getNodesData($full = false)

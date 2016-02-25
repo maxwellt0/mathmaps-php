@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\NoteStatus;
+use common\models\PermissionHelpers;
 use common\models\User;
 use common\models\UserNote;
 use Yii;
@@ -20,10 +21,36 @@ class NoteController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'user-list', 'accept', 'deny'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'user-list', 'accept', 'deny'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return PermissionHelpers::requireMinimumRole('Admin')
+                            && PermissionHelpers::requireStatus('Active');
+                        }
+                    ],
+                    [
+                        'actions' => ['update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return PermissionHelpers::requireMinimumRole('SuperUser')
+                            && PermissionHelpers::requireStatus('Active');
+                        }
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'accept' => ['post'],
+                    'deny' => ['post'],
                 ],
             ],
         ];
@@ -56,30 +83,6 @@ class NoteController extends Controller
      */
     public function actionView($id)
     {
-//        $mainNote = $this->findModel($id);
-//
-//        $lowerNotes = $mainNote->lowerNotes;
-//        $mainNoteName = $mainNote->name;
-//        $mainNoteId = $mainNote->id;
-//
-//        $node = [$mainNoteId, $mainNoteName];
-//        $nodesModel = [$node];
-//        $linksModel = [];
-//
-//        foreach ($lowerNotes as $note) {
-//            $node = [$note->id, $note->name];
-//            $nodesModel[] = $node;
-//
-//            $link = [$note->id, $mainNoteId];
-//            $linksModel[] = $link;
-//        }
-//
-//        return $this->render('view', [
-//            'noteModel' => $mainNote,
-//            'nodesModel' => $nodesModel,
-//            'linksModel' => $linksModel,
-//        ]);
-
         $this->redirect('http://yii2build.com/note/'.$id);
     }
 
@@ -102,41 +105,6 @@ class NoteController extends Controller
             'id' => $userId
         ]);
     }
-
-//    public function actionViewMap($id)
-//    {
-//        $mainNote = $this->findModel($id);
-//
-//        $lowerNotes = $mainNote->lowerNotes;
-//        $higherNotes = $mainNote->higherNotes;
-//        $mainNoteName = $mainNote->name;
-//        $mainNoteId = $mainNote->id;
-//
-//        $node = [$mainNoteId, $mainNoteName];
-//        $nodesModel = [$node];
-//        $linksModel = [];
-//
-//        foreach ($lowerNotes as $note) {
-//            $node = [$note->id, $note->name];
-//            $nodesModel[] = $node;
-//
-//            $link = [$note->id, $mainNoteId];
-//            $linksModel[] = $link;
-//        }
-//        foreach ($higherNotes as $note) {
-//            $node = [$note->id, $note->name];
-//            $nodesModel[] = $node;
-//
-//            $link = [$mainNoteId, $note->id];
-//            $linksModel[] = $link;
-//        }
-//
-//        return $this->render('map', [
-//            'noteModel' => $mainNote,
-//            'nodesModel' => $nodesModel,
-//            'linksModel' => $linksModel,
-//        ]);
-//    }
 
     public function actionCreate()
     {

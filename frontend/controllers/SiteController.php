@@ -29,7 +29,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'change-password', 'change-email'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -37,7 +37,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','changepassword'],
+                        'actions' => ['logout','change-password', 'change-email'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -101,9 +101,9 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                Yii::$app->session->setFlash('success', 'Дякуємо, що зв\'язались з нами. Ми дамо відповідь якнайшвидше.');
             } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending email.');
+                Yii::$app->session->setFlash('error', 'Сталася помилка надсилання email.');
             }
 
             return $this->refresh();
@@ -145,11 +145,11 @@ class SiteController extends Controller
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->getSession()->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->getSession()->setFlash('success', 'Перевірте свою електронну пошту для подальших інструкцій.');
 
                 return $this->goHome();
             } else {
-                Yii::$app->getSession()->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+                Yii::$app->getSession()->setFlash('error', 'Вибачте, ми не можемо відновити пароль для вказаного email.');
             }
         }
 
@@ -167,7 +167,7 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->getSession()->setFlash('success', 'New password was saved.');
+            Yii::$app->getSession()->setFlash('success', 'Новий пароль збережено.');
 
             return $this->goHome();
         }
@@ -187,12 +187,12 @@ class SiteController extends Controller
                     $modeluser->password = $_POST['PasswordForm']['newpass'];
                     if($modeluser->save()){
                         Yii::$app->getSession()->setFlash(
-                            'success','Password changed'
+                            'success','Пароль змінено.'
                         );
                         return $this->redirect(['index']);
                     }else{
                         Yii::$app->getSession()->setFlash(
-                            'error','Password not changed'
+                            'error','Пароль не змінено.'
                         );
                         return $this->redirect(['index']);
                     }
@@ -220,10 +220,16 @@ class SiteController extends Controller
         $model = $this->getCurrentUser();
 
         if ($model->load(Yii::$app->request->post())
-                && $model->validate() && $model->save()) {
-            Yii::$app->getSession()->setFlash(
-                'success','Email змінено'
-            );
+                && $model->validate()) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash(
+                    'success','Email змінено.'
+                );
+            } else {
+                Yii::$app->getSession()->setFlash(
+                    'error','Email не змінено.'
+                );
+            }
 
             return $this->redirect(['profile/update']);
         } else {

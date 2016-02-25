@@ -25,7 +25,7 @@ class ProfileController extends Controller
                 'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'update'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -56,17 +56,15 @@ class ProfileController extends Controller
 
     public function actionUpdate()
     {
-        $model = new Profile;
-        $model->user_id = Yii::$app->user->identity->id;
-
-//        if ($already_exists = RecordHelpers::userHas('profile')) {
-//            return $this->render('view', [
-//                'model' => $this->findModel($already_exists),
-//            ]);
-//        }
+        if ($already_exists = RecordHelpers::userHas('profile')) {
+            $model = $this->findModel($already_exists);
+        } else {
+            $model = new Profile;
+            $model->user_id = Yii::$app->user->identity->id;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view']);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,

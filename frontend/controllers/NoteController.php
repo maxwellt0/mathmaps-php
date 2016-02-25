@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\PermissionHelpers;
 use common\models\User;
 use common\models\UserNote;
 use common\models\UsingStatus;
@@ -22,10 +23,36 @@ class NoteController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['create', 'update', 'delete', 'user-list',
+                    'offer', 'change-status', 'add-to-list'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'user-list', 'change-status', 'add-to-list'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return PermissionHelpers::requireStatus('Active');
+                        }
+                    ],
+                    [
+                        'actions' => ['update', 'delete', 'offer'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return PermissionHelpers::requireStatus('Active');
+                        }
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'add-to-list' => ['post'],
+                    'offer' => ['post'],
+                    'change-status' => ['post'],
                 ],
             ],
         ];
@@ -275,10 +302,6 @@ class NoteController extends Controller
         }
     }
 
-    /**
-     * @param $id
-     * @throws NotFoundHttpException
-     */
     private function isUserOwner($id)
     {
         $note = $this->findModel($id);
@@ -287,14 +310,5 @@ class NoteController extends Controller
 
         return ($userNote && !$isPublished) ? true : false;
     }
-
-//    protected function getUser($username)
-//    {
-//        if (($user = User::findByUsername($username)) !== null) {
-//            return $user;
-//        } else {
-//            throw new NotFoundHttpException('The requested page does not exist.');
-//        }
-//    }
 
 }

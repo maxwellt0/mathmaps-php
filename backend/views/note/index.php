@@ -63,11 +63,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'accept' => function ($url, $model) {
                         return Html::a('<i class="fa fa-hand-o-up"></i>', $url, [
                             'title' => 'Опублікувати',
+                            'data' => ['method' => 'post']
                         ]);
                     },
                     'deny' => function ($url, $model) {
                         return Html::a('<i class="fa fa-hand-paper-o"></i>', $url, [
                             'title' => 'Відхилити публікацію',
+                            'data' => ['method' => 'post']
                         ]);
                     }
                 ]

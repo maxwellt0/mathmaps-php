@@ -302,10 +302,6 @@ class User extends ActiveRecord implements IdentityInterface
         );
     }
 
-    /**
-     * @getProfileId
-     *
-     */
     public function getProfileId()
     {
         return $this->profile ? $this->profile->id : 'none';
